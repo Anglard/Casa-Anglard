@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Casa Anglard — Objetos y ediciones impresas con intención</title>
+<meta name="description" content="Casa Anglard: pósters, textil, bolsas y accesorios en ediciones limitadas, impresos con calidad de exhibición.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- BARRA DE ANUNCIOS -->
+  <div class="announcement">Envíos a toda la República · Ediciones limitadas</div>
+
+  <!-- ENCABEZADO / NAVEGACIÓN -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#top" class="logo">CASA ANGLARD</a>
+      <nav class="main-nav">
+        <a href="#catalogo">Catálogo</a>
+        <a href="#proceso">Cómo funciona</a>
+        <a href="#envio">Envíos</a>
+        <a href="#contacto">Contacto</a>
+        <button class="link-btn" id="openCartBtn" style="margin-left: 14px; font-weight: 600; color: var(--teal);">Mi Bolsa (<span id="cartCountGlobal">0</span>)</button>
+      </nav>
+      <button class="btn btn-dark btn-small" id="openShippingBtnHeader">Cotizar envío</button>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- SECCIÓN 1: BIENVENIDA (HERO) -->
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-text">
+          <span class="eyebrow">Impresión DTG · DTF · UV</span>
+          <h1>Objetos y ediciones impresas con intención</h1>
+          <p class="lead">Casa Anglard reúne pósters, textil, bolsas y accesorios en ediciones limitadas, impresos con calidad de exhibición para acompañar la vida diaria.</p>
+          <div class="hero-actions">
+            <a href="#catalogo" class="btn btn-dark">Ver catálogo</a>
+            <a href="#contacto" class="btn btn-outline">Pedido especial</a>
+          </div>
+        </div>
+        <div class="hero-collage">
+          <img src="images/poster.jpg" alt="Póster impreso Casa Anglard" class="collage-a">
+          <img src="images/termo.jpg" alt="Termo con impresión UV Casa Anglard" class="collage-b">
+          <img src="images/bolsa-manta.jpg" alt="Bolsa de manta Casa Anglard" class="collage-c">
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 2: PROCESOS DE TRABAJO -->
+    <section class="process" id="proceso">
+      <div class="section-inner">
+        <div class="process-grid">
+          <div class="process-item">
+            <span class="mono-tag">DTG</span>
+            <h3>Direct to Garment</h3>
+            <p>Impresión directa sobre playeras y sudaderas de algodón. Alta definición de color, ideal para ilustraciones y piezas de arte.</p>
+          </div>
+          <div class="process-item">
+            <span class="mono-tag">DTF</span>
+            <h3>Direct to Film</h3>
+            <p>Transferencia versátil para textil y superficies mixtas. Buena resistencia al lavado y detalle en trazos finos.</p>
+          </div>
+          <div class="process-item">
+            <span class="mono-tag">UV</span>
+            <h3>Impresión UV</h3>
+            <p>Curado con luz UV sobre superficies rígidas y envolventes: termos, acrílicos y objetos de acero inoxidable.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 3: CATÁLOGO DE PRODUCTOS -->
+    <section class="catalog" id="catalogo">
+      <div class="section-inner">
+        <div class="catalog-header">
+          <div>
+            <span class="eyebrow">Catálogo 2026/27</span>
+            <h2>Productos disponibles</h2>
+          </div>
+          <span class="catalog-count"><span id="count">15</span> productos</span>
+        </div>
+
+        <div class="filters" id="filters">
+          <button class="filter-btn active" data-filter="all">Todas</button>
+          <button class="filter-btn" data-filter="papeleria">Papelería</button>
+          <button class="filter-btn" data-filter="accesorios">Accesorios</button>
+          <button class="filter-btn" data-filter="bolsas">Bolsas</button>
+          <button class="filter-btn" data-filter="textil">Textil</button>
+        </div>
+
+        <div class="product-grid" id="productGrid"></div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 4: LOGÍSTICA Y POLÍTICAS -->
+    <section class="note-strip" id="envio">
+      <div class="section-inner">
+        <p>Los precios incluyen IVA y están sujetos a cambio según el proyecto. Los productos marcados como <em>cotización</em> se definen a partir del volumen, tamaño y complejidad del diseño.</p>
+        <p>En compras de mayoreo (5 piezas o más del mismo producto) aplica un descuento — escríbenos para calcularlo juntos.</p>
+        <p>El envío se calcula aparte del precio de la mercancía, según tu ubicación — así siempre sabes con claridad qué corresponde al producto y qué corresponde a hacerlo llegar hasta ti. <button class="link-btn" id="openShippingBtnNote">Cotizar mi envío →</button></p>
+      </div>
+    </section>
+
+    <!-- CIERRE Y CONTACTO DIRECTO -->
+    <section class="cta-contact" id="contacto">
+      <div class="section-inner">
+        <h2>¿Buscas una pieza personalizada o un pedido especial?</h2>
+        <p>Escríbenos y armamos una cotización a la medida de tu proyecto.</p>
+        <div class="contact-links">
+          <a href="https://wa.me/525637091144" target="_blank" rel="noopener" class="btn btn-dark">WhatsApp</a>
+          <a href="mailto:casaanglard@gmail.com" class="btn btn-outline-light">casaanglard@gmail.com</a>
+          <a href="https://instagram.com/casaanglard" target="_blank" rel="noopener" class="btn btn-outline-light">@casaanglard</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Casa Anglard</div>
+        <p class="footer-tag">Objetos y ediciones impresas con intención.</p>
+      </div>
+      <div class="footer-col">
+        <a href="#catalogo">Catálogo</a>
+        <a href="#proceso">Proceso</a>
+        <a href="#envio">Envíos</a>
+        <a href="#contacto">Contacto</a>
+      </div>
+      <div class="footer-col">
+        <span>WhatsApp</span>
+        <span>casaanglard@gmail.com</span>
+        <span>@casaanglard</span>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 Casa Anglard. Precios sujetos a cambio según proyecto, incluyen IVA. Envío cotizado por separado según destino.</div>
+  </footer>
+
+  <!-- MODAL: DETALLE DE PRODUCTO -->
+  <div class="modal-overlay" id="modalOverlay"></div>
+  <div class="modal" id="modal">
+    <button class="modal-close" id="modalClose">×</button>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+
+  <!-- MODAL: COTIZADOR DE ENVÍO -->
+  <div class="modal-overlay" id="shippingOverlay"></div>
+  <div class="modal modal-small" id="shippingModal">
+    <button class="modal-close" id="shippingClose">×</button>
+    <div class="modal-body">
+      <div class="shipping-form-wrap">
+        <span class="eyebrow">Envío</span>
+        <h3>Cotiza tu envío</h3>
+        <p class="shipping-copy">El costo de envío se calcula según tu ubicación y se cobra por separado del precio de los productos. Cuéntanos a dónde llega tu pedido y te confirmamos el costo antes de cualquier cobro.</p>
+        <form id="shippingForm">
+          <label>
+            Código postal
+            <input type="text" id="shippingCP" inputmode="numeric" placeholder="Ej. 03920" required>
+          </label>
+          <label>
+            Ciudad / Estado
+            <input type="text" id="shippingCiudad" placeholder="Ej. Ciudad de México" required>
+          </label>
+          <button type="submit" class="btn btn-dark" id="shippingSubmit">Solicitar costo de envío</button>
+        </form>
+        <p class="shipping-disclaimer">* Este botón queda listo para conectarse a un cotizador de paquetería automático. Mientras tanto, tu solicitud se envía directo por WhatsApp.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL CAJÓN: BOLSA DE COMPRAS -->
+  <div class="modal-overlay" id="cartOverlay"></div>
+  <div class="modal modal-small" id="cartDrawer" style="right: 0; left: auto; transform: translate(100%, -50%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+    <button class="modal-close" id="cartClose">×</button>
+    <div class="shipping-form-wrap">
+      <span class="eyebrow">Tu Bolsa</span>
+      <h3>Bolsa de Compra</h3>
+      <div id="cartItemsList" style="margin: 20px 0; max-height: 40vh; overflow-y: auto; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
+        <!-- Se inyecta dinámicamente con JS -->
+      </div>
+      <div style="margin: 16px 0; display: flex; justify-content: space-between; font-weight: 700; font-size: 16px;">
+        <span>Subtotal:</span>
+        <span id="cartSubtotal">$0 MXN</span>
+      </div>
+      
+      <div style="margin: 16px 0;">
+        <label style="display: block; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px;">Pasarela de Pago Segura</label>
+        <select id="cartPaymentMethod" style="width: 100%; padding: 10px; border: 1px solid var(--border); background: white; font-family: var(--font-body); font-size: 13.5px; border-radius: 2px; margin-bottom: 14px;">
+          <option value="paypal">PayPal (Tarjeta de Crédito / Débito)</option>
+          <option value="mercadopago">Mercado Pago (Cobro Seguro Express)</option>
+          <option value="clip">Clip Checkout (Procesamiento Bancario)</option>
+          <option value="whatsapp">Completar por WhatsApp (Efectivo/Transferencia)</option>
+        </select>
+      </div>
+
+      <p class="shipping-copy" style="font-size: 12px; margin-bottom: 20px;">* El costo de envío se calculará de forma personalizada según tu código postal al confirmar tu orden.</p>
+      <button class="btn btn-dark" id="checkoutBtn" style="width: 100%;">Procesar Pago Seguro</button>
+    </div>
+  </div>
+
+  <!-- MODAL: LIGHTBOX DE ZOOM INTERACTIVO -->
+  <div class="modal-overlay" id="zoomOverlay" style="z-index: 70; background: rgba(0,0,0,0.85);"></div>
+  <div id="zoomModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 71; max-width: 90vw; max-height: 90vh;">
+    <button class="modal-close" id="zoomClose" style="color: white; right: -30px; top: -30px; font-size: 32px;">×</button>
+    <img id="zoomImage" src="" alt="Zoom" style="max-width: 100%; max-height: 90vh; border-radius: 2px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); cursor: zoom-out;">
+  </div>
+
+  <!-- VÍNCULOS AL CATÁLOGO Y SCRIPTS -->
+  <script src="products.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
