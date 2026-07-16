@@ -29,12 +29,12 @@
   const zoomImage = document.getElementById('zoomImage');
   const zoomClose = document.getElementById('zoomClose');
 
-  const WHATSAPP_NUMBER = '525637091144'; // Teléfono real configurado para Casa Anglard
+  const WHATSAPP_NUMBER = '525637091144'; // Casa Anglard — WhatsApp Oficial México
 
   let activeFilter = 'all';
   let cart = JSON.parse(localStorage.getItem('casa_anglard_cart')) || [];
 
-  // ---------- INTERFAZ ZOOM LIGHTBOX ----------
+  // ---------- LÓGICA DE ZOOM LIGHTBOX ----------
   function openZoom(imgSrc) {
     zoomImage.src = imgSrc;
     zoomModal.style.display = 'block';
@@ -50,7 +50,7 @@
   zoomOverlay.addEventListener('click', closeZoom);
   zoomImage.addEventListener('click', closeZoom);
 
-  // ---------- CONTROL DE LA BOLSA DE COMPRAS ----------
+  // ---------- OPERACIONES DE LA BOLSA DE COMPRA ----------
   function updateCartDOM() {
     localStorage.setItem('casa_anglard_cart', JSON.stringify(cart));
     const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
@@ -124,7 +124,7 @@
   cartClose.addEventListener('click', closeCartDrawer);
   cartOverlay.addEventListener('click', closeCartDrawer);
 
-  // CONTROL DEL BOTÓN COMPRAR DESDE LA BOLSA
+  // PROCESAMIENTO SEGURO DE PASARELAS DESDE LA BOLSA
   checkoutBtn.addEventListener('click', () => {
     if (cart.length === 0) return;
     const gateway = cartPaymentMethod.value;
@@ -136,25 +136,25 @@
     });
 
     if (gateway === 'paypal') {
-      alert(`Redirigiendo de forma segura a la pasarela de PayPal para procesar tu pago de $${subtotal} MXN.\n\n* Listo para colocar tu Client ID.`);
+      alert(`Conectando de forma cifrada con PayPal para procesar tu pago de $${subtotal} MXN.\n\n* El entorno está listo para recibir tu Client ID de producción en GitHub.`);
     } else if (gateway === 'mercadopago') {
-      alert(`Procesando tu orden global con Mercado Pago Checkout Pro.\n\n* Configura los links individuales dentro del campo "mpLink" de tu base de datos.`);
+      alert(`Redirigiendo al Checkout Seguro de Mercado Pago.\n\n* Recuerda que puedes enlazar tus links de pago individuales directo en products.js.`);
     } else if (gateway === 'clip') {
-      alert(`Iniciando conexión con Clip Checkout API para cobros con tarjeta bancaria.`);
+      alert(`Abriendo pasarela Clip Checkout API para tarjetas de Crédito o Débito.`);
     } else {
-      let textMsg = "Hola Casa Anglard, prefiero liquidar las piezas de mi bolsa por transferencia bancaria:\n\n";
+      let textMsg = "Hola Casa Anglard, quiero confirmar mi bolsa mediante transferencia/efectivo:\n\n";
       cart.forEach(item => {
         const p = PRODUCTS.find(x => x.id === item.id);
         if (p) textMsg += `• ${item.quantity}x ${p.name} (${p.priceText})\n`;
       });
-      textMsg += "\nQuedo a la espera de los datos de cuenta y cotización de envío.";
+      textMsg += "\nQuedo atento para proporcionar mis datos de envío.";
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(textMsg)}`, '_blank', 'noopener');
     }
     
     closeCartDrawer();
   });
 
-  // ---------- CONTROL DEL MOCKUP EN TARJETAS ----------
+  // ---------- RENDERIZADO DEL CATÁLOGO ----------
   function cardHTML(p) {
     return `
       <div class="product-card" data-id="${p.id}" data-category="${p.category}">
@@ -189,7 +189,7 @@
 
     grid.querySelectorAll('.zoom-trigger-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
-        e.stopPropagation();
+        e.stopPropagation(); // Evita que se abra el modal trasero al hacer zoom
         openZoom(btn.dataset.zoomSrc);
       });
     });
@@ -204,7 +204,7 @@
     });
   });
 
-  // ---------- MODAL: VISTA DE ARTÍCULO ----------
+  // ---------- MODAL DINÁMICO DE DETALLE ----------
   function openModal(id) {
     const p = PRODUCTS.find(x => x.id === id);
     if (!p) return;
@@ -213,13 +213,13 @@
 
     const paymentButtonsHTML = hasFixedPrice ? `
       <div class="payment-buttons">
-        <div class="payment-label">Canal Express Individual</div>
+        <div class="payment-label">Pago rápido express</div>
         <div class="payment-row">
           <button class="pay-btn pay-mercadopago" data-provider="mercadopago" data-product="${p.id}">Pagar esta pieza con Mercado Pago</button>
         </div>
       </div>
     ` : `
-      <p class="quote-note">Este producto se cotiza por proyecto. Solicita tu cotización directamente por WhatsApp o agrega otros artículos fijos a tu bolsa.</p>
+      <p class="quote-note">Este producto se cotiza por proyecto. Solicita tu cotización directamente por WhatsApp o añade otros artículos fijos a tu bolsa.</p>
     `;
 
     const addToCartHTML = hasFixedPrice ? `
@@ -229,7 +229,7 @@
     modalBody.innerHTML = `
       <div style="position: relative; background: var(--teal-soft); cursor: zoom-in;" id="modalImgContainer">
         <img class="modal-img" src="${p.img}" alt="${p.name}">
-        <div style="position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,0.9); padding: 4px 8px; font-size: 11px; font-family: var(--font-mono); border: 1px solid var(--border); border-radius: 2px;">Click para ampliar arte</div>
+        <div style="position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,0.9); padding: 4px 8px; font-size: 11px; font-family: var(--font-mono); border: 1px solid var(--border); border-radius: 2px;">Click para ampliar foto</div>
       </div>
       <div class="modal-info">
         <span class="cat-label">${p.categoryLabel}</span>
@@ -245,7 +245,7 @@
         ${paymentButtonsHTML}
 
         <div class="modal-actions">
-          <a class="btn btn-outline" href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hola, me interesa saber más de: ' + p.name)}" target="_blank" rel="noopener" style="width: 100%;">Consultar por WhatsApp</a>
+          <a class="btn btn-outline" href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hola, tengo una duda sobre: ' + p.name)}" target="_blank" rel="noopener" style="width: 100%;">Consultar dudas por WhatsApp</a>
           <button class="link-btn" data-open-shipping>Cotizar envío para esta pieza →</button>
         </div>
       </div>
@@ -300,14 +300,14 @@
         window.open(product.mpLink, '_blank', 'noopener');
       } else {
         alert(
-          `Falta configurar el enlace de cobro de Mercado Pago para "${product.name}".\n\n` +
-          `Genéralo en tu perfil de Mercado Pago y pégalo en el campo "mpLink" en products.js.`
+          `Falta asignar el link de pago para "${product.name}".\n\n` +
+          `Genéralo en tu panel y pégalo en el campo "mpLink" dentro de products.js.`
         );
       }
     }
   }
 
-  // ---------- SOLICITUD DE PAQUETERÍA ----------
+  // ---------- COTIZADOR DE ENVÍO ----------
   function openShippingModal() {
     shippingModal.classList.add('open');
     shippingOverlay.classList.add('open');
@@ -329,7 +329,7 @@
     e.preventDefault();
     const cp = document.getElementById('shippingCP').value.trim();
     const ciudad = document.getElementById('shippingCiudad').value.trim();
-    const mensaje = `Hola Casa Anglard, me gustaría cotizar la mensajería de mi orden hacia la ciudad de ${ciudad}, Código Postal: ${cp}.`;
+    const mensaje = `Hola, quiero cotizar el envío de mi pedido a ${ciudad}, CP ${cp}.`;
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`, '_blank', 'noopener');
     closeShippingModal();
     shippingForm.reset();
