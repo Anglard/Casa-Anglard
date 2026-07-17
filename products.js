@@ -1,371 +1,272 @@
-// Base de Datos Maestra Unificada — Casa Anglard 2026/27
-// Contiene la línea de Impresión Editorial Premium y la línea de Esencias y Bienestar
+// Base de datos de productos — Casa Anglard 2026/27
+// Los precios son números enteros expresados en pesos mexicanos.
+
+const AROMA_VARIANTS = [
+  {
+    id: "10ml",
+    name: "Gotero de 10 ml",
+    price: 250
+  },
+  {
+    id: "20ml",
+    name: "Gotero de 20 ml",
+    price: 320
+  },
+  {
+    id: "spray",
+    name: "Spray ambiental",
+    price: 380
+  }
+];
+
 const PRODUCTS = [
-  // ==========================================
-  // SECCIÓN A: EDICIONES IMPRESAS Y TEXTIL
-  // ==========================================
   {
     id: "poster",
+    sku: "CA-IMP-001",
     name: "Póster de Exhibición",
     category: "papeleria",
     categoryLabel: "Papelería",
-    medidas: "28 x 43 cm",
-    material: "Papel couché 225 g",
+    medidas: "28 × 43 cm",
+    material: "Papel couché de 225 g",
+    description: "Póster editorial impreso en alta definición.",
     price: 68,
-    priceText: "$68 MXN",
-    img: "images/poster.jpg",
-    mpLink: "" // Opcional: link express de Mercado Pago
+    img: "images/poster.jpg"
   },
   {
     id: "postal",
+    sku: "CA-IMP-002",
     name: "Postal Editorial",
     category: "papeleria",
     categoryLabel: "Papelería",
-    medidas: "15 x 10 cm",
-    material: "Impresión mate premium",
+    medidas: "15 × 10 cm",
+    material: "Impresión mate",
+    description: "Postal editorial para obsequio, colección o exhibición.",
     price: 41,
-    priceText: "$41 MXN",
-    img: "images/postal.jpg",
-    mpLink: ""
+    img: "images/postal.jpg"
   },
   {
     id: "termo",
+    sku: "CA-ACC-001",
     name: "Termo de Acero Inoxidable",
     category: "accesorios",
     categoryLabel: "Accesorios",
-    medidas: "8 x 22 cm",
-    material: "Acero inoxidable, impresión envolvente UV",
+    medidas: "8 × 22 cm",
+    material: "Acero inoxidable con impresión UV",
+    description: "Termo reutilizable con diseño de Casa Anglard.",
     price: 567,
-    priceText: "$567 MXN",
-    img: "images/termo.jpg",
-    mpLink: ""
+    img: "images/termo.jpg"
   },
   {
     id: "libreta",
+    sku: "CA-PAP-001",
     name: "Libreta de Cubierta Rígida",
     category: "papeleria",
     categoryLabel: "Papelería",
-    medidas: "14.5 x 21 cm",
-    material: "Cubierta rígida silk-touch",
+    medidas: "14.5 × 21 cm",
+    material: "Cubierta rígida de acabado suave",
+    description: "Libreta editorial para escritura, notas y proyectos.",
     price: 189,
-    priceText: "$189 MXN",
-    img: "images/libreta.jpg",
-    mpLink: ""
+    img: "images/libreta.jpg"
   },
   {
     id: "imanes",
+    sku: "CA-ACC-002",
     name: "Imanes de Acrílico",
     category: "accesorios",
     categoryLabel: "Accesorios",
-    medidas: "7 x 7 cm / 5 x 7 cm",
-    material: "Acrílico pulido de alta resistencia",
+    medidas: "7 × 7 cm / 5 × 7 cm",
+    material: "Acrílico pulido",
+    description: "Imanes decorativos en formatos seleccionados.",
     price: 61,
-    priceText: "$61 MXN",
-    img: "images/imanes.jpg",
-    mpLink: ""
+    img: "images/imanes.jpg"
   },
   {
     id: "lapices",
-    name: "Lápices Negros Especiales",
+    sku: "CA-PAP-002",
+    name: "Lápices Especiales",
     category: "papeleria",
     categoryLabel: "Papelería",
-    medidas: "Estándar",
-    material: "Con goma $20 · Sin goma $16 · Arcoíris $20",
-    price: 16,
-    priceText: "$16–$20 MXN",
-    img: "images/lapices.jpg",
-    mpLink: ""
+    medidas: "Tamaño estándar",
+    material: "Madera y grafito",
+    description: "Lápices disponibles en distintas presentaciones.",
+    variants: [
+      {
+        id: "sin-goma",
+        name: "Negro sin goma",
+        price: 16
+      },
+      {
+        id: "con-goma",
+        name: "Negro con goma",
+        price: 20
+      },
+      {
+        id: "arcoiris",
+        name: "Arcoíris",
+        price: 20
+      }
+    ],
+    img: "images/lapices.jpg"
   },
   {
     id: "pin",
+    sku: "CA-ACC-003",
     name: "Pin Metálico Esmaltado",
     category: "accesorios",
     categoryLabel: "Accesorios",
-    medidas: "A definir según diseño",
-    material: "Esmaltado artesanal, cotización por volumen",
+    medidas: "Según diseño",
+    material: "Metal esmaltado",
+    description: "Producto elaborado bajo cotización y volumen.",
     price: null,
-    priceText: "Cotización",
-    img: "images/pin.jpg",
-    mpLink: ""
+    img: "images/pin.jpg"
   },
   {
     id: "bolsa-chica",
+    sku: "CA-BOL-001",
     name: "Bolsa Premium Chica",
     category: "bolsas",
     categoryLabel: "Bolsas",
-    medidas: "35 x 35 cm",
-    material: "Tote premium lona satinada",
+    medidas: "35 × 35 cm",
+    material: "Lona satinada",
+    description: "Bolsa reutilizable de formato compacto.",
     price: 284,
-    priceText: "$284 MXN",
-    img: "images/bolsa-chica.jpg",
-    mpLink: ""
+    img: "images/bolsa-chica.jpg"
   },
   {
     id: "bolsa-mediana",
+    sku: "CA-BOL-002",
     name: "Bolsa Premium Mediana",
     category: "bolsas",
     categoryLabel: "Bolsas",
-    medidas: "52 x 35 cm",
-    material: "Tote premium lona satinada",
+    medidas: "52 × 35 cm",
+    material: "Lona satinada",
+    description: "Bolsa reutilizable de formato mediano.",
     price: 338,
-    priceText: "$338 MXN",
-    img: "images/bolsa-mediana.jpg",
-    mpLink: ""
+    img: "images/bolsa-mediana.jpg"
   },
   {
     id: "bolsa-grande",
+    sku: "CA-BOL-003",
     name: "Bolsa Premium Grande",
     category: "bolsas",
     categoryLabel: "Bolsas",
-    medidas: "35 x 45 cm",
-    material: "Tote premium lona satinada",
+    medidas: "35 × 45 cm",
+    material: "Lona satinada",
+    description: "Bolsa reutilizable de gran capacidad.",
     price: 311,
-    priceText: "$311 MXN",
-    img: "images/bolsa-grande.jpg",
-    mpLink: ""
+    img: "images/bolsa-grande.jpg"
   },
   {
     id: "bolsa-manta",
-    name: "Bolsa de Manta (Tote)",
+    sku: "CA-BOL-004",
+    name: "Bolsa de Manta",
     category: "bolsas",
     categoryLabel: "Bolsas",
-    medidas: "40 x 40 cm",
-    material: "Manta 100% natural de alta densidad",
+    medidas: "40 × 40 cm",
+    material: "Manta de algodón",
+    description: "Bolsa ligera y reutilizable de manta natural.",
     price: 115,
-    priceText: "$115 MXN",
-    img: "images/bolsa-manta.jpg",
-    mpLink: ""
+    img: "images/bolsa-manta.jpg"
   },
   {
     id: "cosmetiquera",
+    sku: "CA-ACC-004",
     name: "Cosmetiquera de Mezclilla",
     category: "accesorios",
     categoryLabel: "Accesorios",
-    medidas: "27 x 17 cm",
-    material: "Mezclilla premium con forro y cierre",
+    medidas: "27 × 17 cm",
+    material: "Mezclilla con forro y cierre",
+    description: "Cosmetiquera práctica para objetos personales.",
     price: 115,
-    priceText: "$115 MXN",
-    img: "images/cosmetiquera.jpg",
-    mpLink: ""
+    img: "images/cosmetiquera.jpg"
   },
   {
     id: "monedero",
+    sku: "CA-ACC-005",
     name: "Monedero de Mezclilla",
     category: "accesorios",
     categoryLabel: "Accesorios",
-    medidas: "13.5 x 11 cm",
-    material: "Tela de mezclilla con cierre reforzado",
+    medidas: "13.5 × 11 cm",
+    material: "Mezclilla con cierre",
+    description: "Monedero compacto de mezclilla.",
     price: 54,
-    priceText: "$54 MXN",
-    img: "images/monedero.jpg",
-    mpLink: ""
+    img: "images/monedero.jpg"
   },
   {
     id: "playera",
-    name: "Playeras Estampadas",
+    sku: "CA-TEX-001",
+    name: "Playera Estampada",
     category: "textil",
     categoryLabel: "Textil",
     medidas: "Tallas CH / M / G / XG",
-    material: "Algodón premium, impresión suave DTG",
-    price: 270,
-    priceText: "$270 / $311 MXN",
-    img: "images/playera.jpg",
-    mpLink: ""
+    material: "Algodón con impresión DTG",
+    description: "Playera estampada disponible en diferentes tallas.",
+    variants: [
+      {
+        id: "ch-m-g",
+        name: "Tallas CH, M o G",
+        price: 270
+      },
+      {
+        id: "xg",
+        name: "Talla XG",
+        price: 311
+      }
+    ],
+    img: "images/playera.jpg"
   },
   {
     id: "sudadera",
-    name: "Sudaderas con Capucha",
+    sku: "CA-TEX-002",
+    name: "Sudadera con Capucha",
     category: "textil",
     categoryLabel: "Textil",
     medidas: "Tallas CH / M / G / XG",
-    material: "Felpa de algodón, impresión suave DTG",
-    price: 574,
-    priceText: "$574 / $621 MXN",
-    img: "images/sudadera.jpg",
-    mpLink: ""
+    material: "Felpa con impresión DTG",
+    description: "Sudadera con capucha disponible en diferentes tallas.",
+    variants: [
+      {
+        id: "ch-m-g",
+        name: "Tallas CH, M o G",
+        price: 574
+      },
+      {
+        id: "xg",
+        name: "Talla XG",
+        price: 621
+      }
+    ],
+    img: "images/sudadera.jpg"
   },
 
-  // ==========================================
-  // SECCIÓN B: LÍNEA DE ÓLEOS Y ESENCIAS PURAS
-  // ==========================================
-  {
-    id: "patchouli",
-    name: "Esencia de Patchouli",
-    category: "maderas",
-    categoryLabel: "Esencias",
+  ...[
+    ["patchouli", "Patchouli"],
+    ["flor-naranjo", "Flor de Naranjo"],
+    ["mandarina", "Mandarina"],
+    ["sandalo", "Sándalo"],
+    ["mix-18", "Mix de 18 Elementos"],
+    ["arbol-te", "Árbol de Té"],
+    ["bergamota", "Bergamota"],
+    ["toronja-rosa", "Toronja Rosa"],
+    ["geranio", "Geranio"],
+    ["menta", "Menta"],
+    ["eucalipto", "Eucalipto"],
+    ["romero", "Romero"],
+    ["lavanda", "Lavanda"],
+    ["eucalipto-dulce", "Eucalipto Dulce"],
+    ["limon", "Limón"]
+  ].map(([id, aromaName], index) => ({
+    id,
+    sku: `CA-ARO-${String(index + 1).padStart(3, "0")}`,
+    name: `Aroma de ${aromaName}`,
+    category: "aromas",
+    categoryLabel: "Aromas",
     medidas: "10 ml / 20 ml / Spray",
-    material: "10ml: $250 · 20ml: $320 · Spray: $380",
-    price: 250,
-    priceText: "$250–$380 MXN",
-    img: "images/patchouli.jpg",
-    mpLink: ""
-  },
-  {
-    id: "flor-naranjo",
-    name: "Esencia de Flor de Naranjo",
-    category: "maderas",
-    categoryLabel: "Esencias",
-    medidas: "10 ml / 20 ml / Spray",
-    material: "10ml: $250 · 20ml: $320 · Spray: $380",
-    price: 250,
-    priceText: "$250–$380 MXN",
-    img: "images/flor-naranjo.jpg",
-    mpLink: ""
-  },
-  {
-    id: "mandarina",
-    name: "Esencia de Mandarina",
-    category: "maderas",
-    categoryLabel: "Esencias",
-    medidas: "10 ml / 20 ml / Spray",
-    material: "10ml: $250 · 20ml: $320 · Spray: $380",
-    price: 250,
-    priceText: "$250–$380 MXN",
-    img: "images/mandarina.jpg",
-    mpLink: ""
-  },
-  {
-    id: "sandalo",
-    name: "Esencia de Sándalo",
-    category: "maderas",
-    categoryLabel: "Esencias",
-    medidas: "10 ml / 20 ml / Spray",
-    material: "10ml: $250 · 20ml: $320 · Spray: $380",
-    price: 250,
-    priceText: "$250–$380 MXN",
-    img: "images/sandalo.jpg",
-    mpLink: ""
-  },
-  {
-    id: "mix-18",
-    name: "Mix de 18 Elementos",
-    category: "maderas",
-    categoryLabel: "Esencias",
-    medidas: "10 ml / 20 ml / Spray",
-    material: "10ml: $250 · 20ml: $320 · Spray: $380",
-    price: 250,
-    priceText: "$250–$380 MXN",
-    img: "images/mix-18.jpg",
-    mpLink: ""
-  },
-  {
-    id: "arbol-te",
-    name: "Esencia de Árbol de Té",
-    category: "maderas",
-    categoryLabel: "Esencias",
-    medidas: "10 ml / 20 ml / Spray",
-    material: "10ml: $250 · 20ml: $320 · Spray: $380",
-    price: 250,
-    priceText: "$250–$380 MXN",
-    img: "images/arbol-te.jpg",
-    mpLink: ""
-  },
-  {
-    id: "bergamota",
-    name: "Esencia de Bergamota",
-    category: "maderas",
-    categoryLabel: "Esencias",
-    medidas: "10 ml / 20 ml / Spray",
-    material: "10ml: $250 · 20ml: $320 · Spray: $380",
-    price: 250,
-    priceText: "$250–$380 MXN",
-    img: "images/bergamota.jpg",
-    mpLink: ""
-  },
-  {
-    id: "toronja-rosa",
-    name: "Esencia de Toronja Rosa",
-    category: "maderas",
-    categoryLabel: "Esencias",
-    medidas: "10 ml / 20 ml / Spray",
-    material: "10ml: $250 · 20ml: $320 · Spray: $380",
-    price: 250,
-    priceText: "$250–$380 MXN",
-    img: "images/toronja-rosa.jpg",
-    mpLink: ""
-  },
-  {
-    id: "geranio",
-    name: "Esencia de Geranio",
-    category: "maderas",
-    categoryLabel: "Esencias",
-    medidas: "10 ml / 20 ml / Spray",
-    material: "10ml: $250 · 20ml: $320 · Spray: $380",
-    price: 250,
-    priceText: "$250–$380 MXN",
-    img: "images/geranio.jpg",
-    mpLink: ""
-  },
-  {
-    id: "menta",
-    name: "Esencia de Menta",
-    category: "maderas",
-    categoryLabel: "Esencias",
-    medidas: "10 ml / 20 ml / Spray",
-    material: "10ml: $250 · 20ml: $320 · Spray: $380",
-    price: 250,
-    priceText: "$250–$380 MXN",
-    img: "images/menta.jpg",
-    mpLink: ""
-  },
-  {
-    id: "eucalipto",
-    name: "Esencia de Eucalipto",
-    category: "maderas",
-    categoryLabel: "Esencias",
-    medidas: "10 ml / 20 ml / Spray",
-    material: "10ml: $250 · 20ml: $320 · Spray: $380",
-    price: 250,
-    priceText: "$250–$380 MXN",
-    img: "images/eucalipto.jpg",
-    mpLink: ""
-  },
-  {
-    id: "romero",
-    name: "Esencia de Romero",
-    category: "maderas",
-    categoryLabel: "Esencias",
-    medidas: "10 ml / 20 ml / Spray",
-    material: "10ml: $250 · 20ml: $320 · Spray: $380",
-    price: 250,
-    priceText: "$250–$380 MXN",
-    img: "images/romero.jpg",
-    mpLink: ""
-  },
-  {
-    id: "lavanda",
-    name: "Esencia de Lavanda",
-    category: "maderas",
-    categoryLabel: "Esencias",
-    medidas: "10 ml / 20 ml / Spray",
-    material: "10ml: $250 · 20ml: $320 · Spray: $380",
-    price: 250,
-    priceText: "$250–$380 MXN",
-    img: "images/lavanda.jpg",
-    mpLink: ""
-  },
-  {
-    id: "eucalipto-dulce",
-    name: "Esencia de Eucalipto Dulce",
-    category: "maderas",
-    categoryLabel: "Esencias",
-    medidas: "10 ml / 20 ml / Spray",
-    material: "10ml: $250 · 20ml: $320 · Spray: $380",
-    price: 250,
-    priceText: "$250–$380 MXN",
-    img: "images/eucalipto-dulce.jpg",
-    mpLink: ""
-  },
-  {
-    id: "limon",
-    name: "Esencia de Limón",
-    category: "maderas",
-    categoryLabel: "Esencias",
-    medidas: "10 ml / 20 ml / Spray",
-    material: "10ml: $250 · 20ml: $320 · Spray: $380",
-    price: 250,
-    priceText: "$250–$380 MXN",
-    img: "images/limon.jpg",
-    mpLink: ""
-  }
+    material: "Preparación aromática",
+    description: `Producto aromático de ${aromaName} disponible en tres presentaciones.`,
+    variants: AROMA_VARIANTS.map(variant => ({
+      ...variant
+    })),
+    img: `images/${id}.jpg`
+  }))
 ];

@@ -1,224 +1,493 @@
 <!DOCTYPE html>
 <html lang="es-MX">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Casa Anglard — Ediciones Impresas y Esencias con Intención</title>
-<meta name="description" content="Casa Anglard: Colección exclusiva de pósters, textil, accesorios y óleos esenciales purificados en ediciones limitadas.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Casa Anglard — Objetos, libros y aromas con intención</title>
+  <meta
+    name="description"
+    content="Casa Anglard reúne arte impreso, textiles, accesorios y productos aromáticos seleccionados para acompañar tus espacios cotidianos."
+  >
+
+  <link rel="canonical" href="https://www.casa-anglard.com/">
+  <link rel="icon" href="images/casa-anglard-icono.jpg" type="image/jpeg">
+
+  <meta property="og:title" content="Casa Anglard">
+  <meta property="og:description" content="Objetos, libros y aromas elegidos con intención.">
+  <meta property="og:image" content="https://www.casa-anglard.com/images/casa-anglard.jpg">
+  <meta property="og:url" content="https://www.casa-anglard.com/">
+  <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
+  <div class="announcement">
+    Envíos a toda la República · Ediciones limitadas
+  </div>
 
-  <!-- BARRA DE ANUNCIOS -->
-  <div class="announcement">Envíos a toda la República · Ediciones limitadas</div>
-
-  <!-- ENCABEZADO / NAVEGACIÓN -->
   <header class="site-header">
     <div class="header-inner">
-      <!-- LOGOTIPO INTEGRADO EN HEADER -->
-      <a href="#top" class="logo-link">
-        <img src="images/casa-anglard.jpg" alt="Casa Anglard" style="height: clamp(40px, 5vw, 60px); width: auto; display: block;">
+      <a href="#top" class="logo-link" aria-label="Ir al inicio">
+        <img
+          src="images/casa-anglard.jpg"
+          alt="Casa Anglard"
+          style="height: clamp(40px, 5vw, 60px); width: auto;"
+        >
       </a>
-      <nav class="main-nav">
+
+      <nav class="main-nav" aria-label="Navegación principal">
         <a href="#catalogo">Catálogo</a>
         <a href="#proceso">Cómo funciona</a>
         <a href="#envio">Envíos</a>
         <a href="#contacto">Contacto</a>
-        <button class="link-btn" id="openCartBtn" style="margin-left: 14px; font-weight: 600; color: var(--teal);">Mi Bolsa (<span id="cartCountGlobal">0</span>)</button>
+
+        <button
+          type="button"
+          class="link-btn"
+          id="openCartBtn"
+          style="margin-left: 14px; font-weight: 600; color: var(--teal);"
+        >
+          Mi Bolsa (<span id="cartCountGlobal">0</span>)
+        </button>
       </nav>
-      <button class="btn btn-dark btn-small" id="openShippingBtnHeader">Cotizar envío</button>
+
+      <div style="display:flex; align-items:center; gap:12px;">
+        <button
+          type="button"
+          class="link-btn mobile-cart-btn"
+          id="openCartBtnMobile"
+        >
+          Bolsa (<span id="cartCountMobile">0</span>)
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-dark btn-small"
+          id="openShippingBtnHeader"
+        >
+          Cotizar envío
+        </button>
+      </div>
     </div>
   </header>
 
   <main id="top">
-
-    <!-- SECCIÓN 1: BIENVENIDA (HERO) -->
     <section class="hero">
       <div class="hero-grid">
         <div class="hero-text">
-          <span class="eyebrow">Ediciones Impresas · Esencias Puras · Bienestar</span>
-          <h1>Objetos y esencias creadas con intención</h1>
-          <p class="lead">Casa Anglard reúne colecciones textiles, papelería de exhibición y óleos esenciales puros en ediciones limitadas, diseñados para acompañar y armonizar tu vida diaria.</p>
+          <span class="eyebrow">
+            Ediciones impresas · Aromas · Bienestar
+          </span>
+
+          <h1>Objetos, libros y aromas elegidos con intención</h1>
+
+          <p class="lead">
+            Casa Anglard reúne colecciones textiles, arte impreso,
+            accesorios y productos aromáticos en ediciones seleccionadas
+            para acompañar y dar carácter a tu vida cotidiana.
+          </p>
+
           <div class="hero-actions">
-            <a href="#catalogo" class="btn btn-dark">Ver catálogo completo</a>
-            <a href="#contacto" class="btn btn-outline">Pedido especial</a>
+            <a href="#catalogo" class="btn btn-dark">
+              Ver catálogo completo
+            </a>
+
+            <a href="#contacto" class="btn btn-outline">
+              Pedido especial
+            </a>
           </div>
         </div>
+
         <div class="hero-collage">
-          <img src="images/poster.jpg" alt="Póster impreso Casa Anglard" class="collage-a">
-          <img src="images/patchouli.jpg" alt="Esencia de Patchouli Casa Anglard" class="collage-b">
-          <img src="images/bolsa-manta.jpg" alt="Bolsa de manta Casa Anglard" class="collage-c">
+          <img
+            src="images/poster.jpg"
+            alt="Póster impreso de Casa Anglard"
+            class="collage-a"
+          >
+          <img
+            src="images/patchouli.jpg"
+            alt="Producto aromático de patchouli de Casa Anglard"
+            class="collage-b"
+          >
+          <img
+            src="images/bolsa-manta.jpg"
+            alt="Bolsa de manta de Casa Anglard"
+            class="collage-c"
+          >
         </div>
       </div>
     </section>
 
-    <!-- SECCIÓN 2: CÓMO FUNCIONA / PROCESOS -->
     <section class="process" id="proceso">
       <div class="section-inner">
         <div class="process-grid">
           <div class="process-item">
-            <span class="mono-tag">Línea Textil e Impresos</span>
-            <h3>Calidad de Exhibición</h3>
-            <p>Piezas impresas en alta definición de color (DTG, DTF y UV) sobre soportes rígidos, papeles de alto gramaje y algodón premium.</p>
+            <span class="mono-tag">Textil e impresos</span>
+            <h3>Calidad de exhibición</h3>
+            <p>
+              Piezas impresas en alta definición sobre soportes rígidos,
+              papeles de alto gramaje y textiles seleccionados.
+            </p>
           </div>
+
           <div class="process-item">
             <span class="mono-tag">10 ml / 20 ml</span>
-            <h3>Goteros Concentrados</h3>
-            <p>Óleos esenciales de máxima pureza y rendimiento. Ideales para difusores ultrasónicos, quemadores o masoterapia local.</p>
+            <h3>Concentrados aromáticos</h3>
+            <p>
+              Presentaciones para uso ambiental y experiencias de
+              bienestar, conforme a las indicaciones específicas de
+              cada producto.
+            </p>
           </div>
+
           <div class="process-item">
             <span class="mono-tag">Spray</span>
-            <h3>Aromas Ambientales</h3>
-            <p>Rociadores premium formulados para transformar la atmósfera de tus habitaciones, textiles y espacios de bienestar al instante.</p>
+            <h3>Aromas ambientales</h3>
+            <p>
+              Rociadores formulados para acompañar habitaciones,
+              textiles y espacios cotidianos.
+            </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- SECCIÓN 3: CATÁLOGO HÍBRIDO -->
     <section class="catalog" id="catalogo">
       <div class="section-inner">
         <div class="catalog-header">
           <div>
-            <span class="eyebrow">Catálogo Unificado 2026/27</span>
-            <h2>Productos y Esencias Disponibles</h2>
+            <span class="eyebrow">Catálogo 2026/27</span>
+            <h2>Productos disponibles</h2>
           </div>
-          <span class="catalog-count"><span id="count">30</span> productos</span>
+
+          <span class="catalog-count">
+            <span id="count">0</span> productos
+          </span>
         </div>
 
         <div class="filters" id="filters">
-          <button class="filter-btn active" data-filter="all">Todas</button>
-          <button class="filter-btn" data-filter="maderas">Esencias y Aromas</button>
-          <button class="filter-btn" data-filter="papeleria">Papelería</button>
-          <button class="filter-btn" data-filter="bolsas">Bolsas</button>
-          <button class="filter-btn" data-filter="textil">Textil</button>
-          <button class="filter-btn" data-filter="accesorios">Accesorios</button>
+          <button type="button" class="filter-btn active" data-filter="all">
+            Todos
+          </button>
+
+          <button type="button" class="filter-btn" data-filter="aromas">
+            Aromas
+          </button>
+
+          <button type="button" class="filter-btn" data-filter="papeleria">
+            Papelería
+          </button>
+
+          <button type="button" class="filter-btn" data-filter="bolsas">
+            Bolsas
+          </button>
+
+          <button type="button" class="filter-btn" data-filter="textil">
+            Textil
+          </button>
+
+          <button type="button" class="filter-btn" data-filter="accesorios">
+            Accesorios
+          </button>
         </div>
 
         <div class="product-grid" id="productGrid"></div>
       </div>
     </section>
 
-    <!-- SECCIÓN 4: LOGÍSTICA Y POLÍTICAS -->
     <section class="note-strip" id="envio">
       <div class="section-inner">
-        <p>Los precios de las piezas impresas y las esencias incluyen IVA[cite: 15]. Los pedidos especiales o personalizados se definen bajo cotización previa[cite: 15].</p>
-        <p>En compras de mayoreo (5 piezas o más del mismo artículo) aplica un descuento preferencial — escríbenos para calcularlo juntos[cite: 15].</p>
-        <p>El envío se calcula aparte de la mercancía según tu ubicación para que siempre tengas absoluta claridad sobre tus costos. <button class="link-btn" id="openShippingBtnNote">Cotizar mi envío →</button></p>
+        <p>
+          Los precios incluyen IVA. Los pedidos especiales o
+          personalizados se realizan bajo cotización previa.
+        </p>
+
+        <p>
+          En compras de mayoreo —cinco piezas o más del mismo artículo—
+          puede aplicar un precio preferencial.
+        </p>
+
+        <p>
+          El envío se calcula por separado según el destino.
+          <button type="button" class="link-btn" id="openShippingBtnNote">
+            Cotizar mi envío →
+          </button>
+        </p>
       </div>
     </section>
 
-    <!-- CTA / CONTACTO -->
     <section class="cta-contact" id="contacto">
       <div class="section-inner">
-        <h2>¿Buscas una firma olfativa o una producción personalizada?</h2>
-        <p>Escríbenos y armamos un presupuesto a la medida exacta de tu proyecto, espacio o negocio.</p>
+        <h2>¿Buscas una producción o selección personalizada?</h2>
+
+        <p>
+          Escríbenos para preparar una cotización conforme a tu proyecto,
+          espacio o negocio.
+        </p>
+
         <div class="contact-links">
-          <a href="https://wa.me/525637091144" target="_blank" rel="noopener" class="btn btn-dark">WhatsApp</a>
-          <a href="mailto:casaanglard@gmail.com" class="btn btn-outline-light">casaanglard@gmail.com</a>
-          <a href="https://instagram.com/casaanglard" target="_blank" rel="noopener" class="btn btn-outline-light">@casaanglard</a>
+          <a
+            href="https://wa.me/525637091144"
+            target="_blank"
+            rel="noopener"
+            class="btn btn-dark"
+          >
+            WhatsApp
+          </a>
+
+          <a
+            href="mailto:casaanglard@gmail.com"
+            class="btn btn-outline-light"
+          >
+            casaanglard@gmail.com
+          </a>
+
+          <a
+            href="https://instagram.com/casaanglard"
+            target="_blank"
+            rel="noopener"
+            class="btn btn-outline-light"
+          >
+            @casaanglard
+          </a>
         </div>
       </div>
     </section>
-
   </main>
 
-  <!-- PIE DE PÁGINA -->
   <footer class="site-footer">
     <div class="footer-inner">
       <div>
-        <!-- LOGOTIPO INTEGRADO EN FOOTER -->
         <div class="footer-logo" style="margin-bottom: 12px;">
-          <img src="images/casa-anglard.jpg" alt="Casa Anglard" style="height: 45px; width: auto; display: block;">
+          <img
+            src="images/casa-anglard.jpg"
+            alt="Casa Anglard"
+            style="height: 45px; width: auto;"
+          >
         </div>
-        <p class="footer-tag">Objetos, esencias y bienestar con intención.</p>
+
+        <p class="footer-tag">
+          Objetos, aromas y bienestar con intención.
+        </p>
       </div>
+
       <div class="footer-col">
         <a href="#catalogo">Catálogo</a>
         <a href="#proceso">Cómo funciona</a>
         <a href="#envio">Envíos</a>
         <a href="#contacto">Contacto</a>
       </div>
+
       <div class="footer-col">
-        <span>WhatsApp</span>
+        <span>WhatsApp: 56 3709 1144</span>
         <span>casaanglard@gmail.com</span>
         <span>@casaanglard</span>
       </div>
     </div>
-    <div class="footer-bottom">© 2026 Casa Anglard. Precios sujetos a cambio según proyecto, incluyen IVA. Envío cotizado por separado según destino.</div>
+
+    <div class="footer-bottom">
+      © 2026 Casa Anglard. Precios sujetos a cambio.
+      Envío cotizado por separado según destino.
+    </div>
   </footer>
 
-  <!-- MODAL: DETALLE DE PRODUCTO -->
   <div class="modal-overlay" id="modalOverlay"></div>
-  <div class="modal" id="modal">
-    <button class="modal-close" id="modalClose">×</button>
+
+  <div
+    class="modal"
+    id="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-label="Detalle del producto"
+  >
+    <button
+      type="button"
+      class="modal-close"
+      id="modalClose"
+      aria-label="Cerrar detalle del producto"
+    >
+      ×
+    </button>
+
     <div class="modal-body" id="modalBody"></div>
   </div>
 
-  <!-- MODAL: COTIZADOR DE ENVÍO -->
   <div class="modal-overlay" id="shippingOverlay"></div>
-  <div class="modal modal-small" id="shippingModal">
-    <button class="modal-close" id="shippingClose">×</button>
+
+  <div
+    class="modal modal-small"
+    id="shippingModal"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="shippingTitle"
+  >
+    <button
+      type="button"
+      class="modal-close"
+      id="shippingClose"
+      aria-label="Cerrar cotizador"
+    >
+      ×
+    </button>
+
     <div class="modal-body">
       <div class="shipping-form-wrap">
         <span class="eyebrow">Envío</span>
-        <h3>Cotiza tu envío</h3>
-        <p class="shipping-copy">El costo de envío se calcula según tu ubicación y se cobra por separado del precio de los productos. Cuéntanos a dónde llega tu pedido y te confirmamos el costo antes de cualquier cobro.</p>
+        <h3 id="shippingTitle">Cotiza tu envío</h3>
+
+        <p class="shipping-copy">
+          El costo se calcula según tu ubicación y se cobra por separado.
+          Te confirmaremos el importe antes de completar la compra.
+        </p>
+
         <form id="shippingForm">
-          <label>
+          <label for="shippingCP">
             Código postal
-            <input type="text" id="shippingCP" inputmode="numeric" placeholder="Ej. 03920" required>
           </label>
-          <label>
-            Ciudad / Estado
-            <input type="text" id="shippingCiudad" placeholder="Ej. Ciudad de México" required>
+
+          <input
+            type="text"
+            id="shippingCP"
+            inputmode="numeric"
+            autocomplete="postal-code"
+            pattern="[0-9]{5}"
+            minlength="5"
+            maxlength="5"
+            placeholder="Ej. 03920"
+            required
+          >
+
+          <label for="shippingCiudad">
+            Ciudad, alcaldía o municipio
           </label>
-          <button type="submit" class="btn btn-dark" id="shippingSubmit">Solicitar costo de envío</button>
+
+          <input
+            type="text"
+            id="shippingCiudad"
+            autocomplete="address-level2"
+            maxlength="80"
+            placeholder="Ej. Ciudad de México"
+            required
+          >
+
+          <button
+            type="submit"
+            class="btn btn-dark"
+            id="shippingSubmit"
+          >
+            Solicitar costo de envío
+          </button>
         </form>
-        <p class="shipping-disclaimer">* Tu solicitud de cotización se enviará de manera automatizada directo por WhatsApp.</p>
+
+        <p class="shipping-disclaimer">
+          Tu solicitud se enviará por WhatsApp.
+        </p>
       </div>
     </div>
   </div>
 
-  <!-- CAJÓN LATERAL DE LA BOLSA DE COMPRA -->
   <div class="modal-overlay" id="cartOverlay"></div>
-  <div class="modal modal-small" id="cartDrawer" style="right: 0; left: auto; transform: translate(100%, -50%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
-    <button class="modal-close" id="cartClose">×</button>
+
+  <div
+    class="modal modal-small"
+    id="cartDrawer"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="cartTitle"
+    style="right: 0; left: auto; transform: translate(100%, -50%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);"
+  >
+    <button
+      type="button"
+      class="modal-close"
+      id="cartClose"
+      aria-label="Cerrar bolsa"
+    >
+      ×
+    </button>
+
     <div class="shipping-form-wrap">
-      <span class="eyebrow">Tu Bolsa</span>
-      <h3>Bolsa de Compra</h3>
-      <div id="cartItemsList" style="margin: 20px 0; max-height: 40vh; overflow-y: auto; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
-        <!-- Items injection -->
-      </div>
-      <div style="margin: 16px 0; display: flex; justify-content: space-between; font-weight: 700; font-size: 16px;">
+      <span class="eyebrow">Tu bolsa</span>
+      <h3 id="cartTitle">Bolsa de compra</h3>
+
+      <div
+        id="cartItemsList"
+        style="margin: 20px 0; max-height: 40vh; overflow-y: auto; border-bottom: 1px solid var(--border); padding-bottom: 10px;"
+      ></div>
+
+      <div
+        style="margin: 16px 0; display: flex; justify-content: space-between; font-weight: 700; font-size: 16px;"
+      >
         <span>Subtotal:</span>
         <span id="cartSubtotal">$0 MXN</span>
       </div>
-      
-      <div style="margin: 16px 0;">
-        <label style="display: block; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px;">Pasarela de Pago Segura</label>
-        <select id="cartPaymentMethod" style="width: 100%; padding: 10px; border: 1px solid var(--border); background: white; font-family: var(--font-body); font-size: 13.5px; border-radius: 2px; margin-bottom: 14px;">
-          <option value="paypal">PayPal (Tarjeta de Crédito / Débito)</option>
-          <option value="mercadopago">Mercado Pago (Cobro Seguro en Línea)</option>
-          <option value="clip">Clip Checkout (Tarjeta)</option>
-          <option value="whatsapp">Completar por WhatsApp (Transferencia)</option>
-        </select>
-      </div>
 
-      <p class="shipping-copy" style="font-size: 12px; margin-bottom: 20px;">* El costo de envío se calculará de forma personalizada según tu código postal al confirmar tu orden.</p>
-      <button class="btn btn-dark" id="checkoutBtn" style="width: 100%;">Procesar Pago Seguro</button>
+      <p class="shipping-copy" style="font-size: 12px; margin-bottom: 20px;">
+        El costo de envío se confirmará por separado antes del pago.
+      </p>
+
+      <button
+        type="button"
+        class="btn btn-dark"
+        id="checkoutBtn"
+        style="width: 100%;"
+      >
+        Pagar de forma segura con Stripe
+      </button>
+
+      <p
+        class="shipping-disclaimer"
+        style="text-align:center; margin-top:12px;"
+      >
+        El pago se procesa en la página segura de Stripe.
+      </p>
     </div>
   </div>
 
-  <!-- INTERFAZ LIGHTBOX DE ZOOM AMPLIADO -->
-  <div class="modal-overlay" id="zoomOverlay" style="z-index: 70; background: rgba(0,0,0,0.85);"></div>
-  <div id="zoomModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 71; max-width: 90vw; max-height: 90vh;">
-    <button class="modal-close" id="zoomClose" style="color: white; right: -30px; top: -30px; font-size: 32px;">×</button>
-    <img id="zoomImage" src="" alt="Zoom" style="max-width: 100%; max-height: 90vh; border-radius: 2px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); cursor: zoom-out;">
+  <div
+    class="modal-overlay"
+    id="zoomOverlay"
+    style="z-index: 70; background: rgba(0,0,0,0.85);"
+  ></div>
+
+  <div
+    id="zoomModal"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-label="Imagen ampliada"
+    style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 71; max-width: 90vw; max-height: 90vh;"
+  >
+    <button
+      type="button"
+      class="modal-close"
+      id="zoomClose"
+      aria-label="Cerrar imagen ampliada"
+      style="color: white; right: -30px; top: -30px; font-size: 32px;"
+    >
+      ×
+    </button>
+
+    <img
+      id="zoomImage"
+      src=""
+      alt="Imagen ampliada del producto"
+      style="max-width: 100%; max-height: 90vh; border-radius: 2px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); cursor: zoom-out;"
+    >
   </div>
 
+  <script src="products.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
