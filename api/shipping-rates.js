@@ -1,7 +1,8 @@
 // api/shipping-rates.js
 // Cotización de envíos para Casa Anglard mediante Envia.com.
 
-const ENVIA_API_URL = "https://api.envia.com/ship/rate/";
+const ENVIA_API_URL =
+  "https://api.envia.com/ship/rate/";
 
 const ENVIA_GEOCODES_URL =
   "https://geocodes.envia.com/zipcode/MX";
@@ -13,7 +14,7 @@ const ORIGIN = {
   phone: "+525637091144",
   street: "Cataluña 21",
   district: "Insurgentes Mixcoac",
-  city: "Benito Juárez",
+  city: "Ciudad de Mexico",
   state: "CX",
   country: "MX",
   postalCode: "03740"
@@ -46,7 +47,7 @@ function normalizeText(value) {
     : "";
 }
 
-function validatePostalCode(postalCode) {
+function isValidPostalCode(postalCode) {
   return /^[0-9]{5}$/.test(
     normalizeText(postalCode)
   );
@@ -68,7 +69,7 @@ function validateDestination(destination) {
     "postalCode"
   ];
 
-  const hasRequiredFields =
+  const fieldsArePresent =
     requiredFields.every(field => {
       return normalizeText(
         destination[field]
@@ -76,14 +77,14 @@ function validateDestination(destination) {
     });
 
   return (
-    hasRequiredFields &&
-    validatePostalCode(
+    fieldsArePresent &&
+    isValidPostalCode(
       destination.postalCode
     )
   );
 }
 
-async function validateDestinationPostalCode(
+async function getPostalCodeLocation(
   postalCode
 ) {
   const url =
@@ -91,56 +92,135 @@ async function validateDestinationPostalCode(
       postalCode
     )}`;
 
-  const response = await fetch(url, {
-    method: "GET",
-    headers: {
-      Accept: "application/json"
-    }
-  });
+  const geocodeResponse =
+    await fetch(url, {
+      method: "GET",
+      headers: {
+        Accept: "application/json"
+      }
+    });
 
-  let data;
+  const rawText =
+    await geocodeResponse.text();
+
+  let parsedData = null;
 
   try {
-    data = await response.json();
+    parsedData =
+      rawText
+        ? JSON.parse(rawText)
+        : null;
   } catch {
-    data = null;
-  }
-
-  if (
-    !response.ok ||
-    !data?.success ||
-    !data?.data
-  ) {
     throw new Error(
-      "El código postal no pudo validarse con Envia."
+      `Geocodes devolvió una respuesta no válida. Código HTTP: ${geocodeResponse.status}.`
     );
   }
 
-  const location = data.data;
+  if (!geocodeResponse.ok) {
+    const message =
+      parsedData?.message ||
+      parsedData?.error ||
+      `Geocodes respondió con código ${geocodeResponse.status}.`;
+
+    throw new Error(
+      typeof message === "string"
+        ? message
+        : JSON.stringify(message)
+    );
+  }
+
+  /*
+   * Envia documenta normalmente:
+   *
+   * {
+   *   success: true,
+   *   data: {
+   *     zipcode,
+   *     city,
+   *     state,
+   *     country
+   *   }
+   * }
+   *
+   * También aceptamos una respuesta directa o un arreglo,
+   * para evitar que una pequeña variación rompa la integración.
+   */
+
+  let location = null;
+
+  if (
+    parsedData &&
+    typeof parsedData.data === "object" &&
+    !Array.isArray(parsedData.data)
+  ) {
+    location =
+      parsedData.data;
+  } else if (
+    Array.isArray(parsedData?.data) &&
+    parsedData.data.length > 0
+  ) {
+    location =
+      parsedData.data[0];
+  } else if (
+    parsedData &&
+    typeof parsedData === "object"
+  ) {
+    location =
+      parsedData;
+  }
+
+  if (!location) {
+    throw new Error(
+      "Envia no devolvió información para ese código postal."
+    );
+  }
 
   const city =
-    normalizeText(location.city);
+    normalizeText(
+      location.city ||
+      location.locality ||
+      location.municipality
+    );
 
   const state =
-    normalizeText(location.state);
+    normalizeText(
+      location.state ||
+      location.stateCode ||
+      location.state_code
+    );
 
-  if (!city || !state) {
+  const returnedPostalCode =
+    normalizeText(
+      location.zipcode ||
+      location.postalCode ||
+      location.postal_code
+    ) || postalCode;
+
+  const country =
+    normalizeText(
+      location.country ||
+      location.countryCode ||
+      location.country_code
+    ) || "MX";
+
+  if (!city) {
     throw new Error(
-      "Envia no devolvió la ciudad o el estado del código postal."
+      `Envia validó el código postal ${postalCode}, pero no devolvió la ciudad.`
+    );
+  }
+
+  if (!state) {
+    throw new Error(
+      `Envia validó el código postal ${postalCode}, pero no devolvió el estado.`
     );
   }
 
   return {
     city,
     state,
-    country:
-      normalizeText(location.country) ||
-      "MX",
+    country,
     postalCode:
-      normalizeText(
-        location.zipcode ||
-        location.postalCode
-      ) || postalCode
+      returnedPostalCode
   };
 }
 
@@ -186,24 +266,30 @@ function createPackage(packageData) {
     packageData || DEFAULT_PACKAGE;
 
   const weight =
-    Number(source.weight);
+    Number(
+      source.weight ??
+      DEFAULT_PACKAGE.weight
+    );
 
   const length =
     Number(
       source.dimensions?.length ??
-      source.length
+      source.length ??
+      DEFAULT_PACKAGE.dimensions.length
     );
 
   const width =
     Number(
       source.dimensions?.width ??
-      source.width
+      source.width ??
+      DEFAULT_PACKAGE.dimensions.width
     );
 
   const height =
     Number(
       source.dimensions?.height ??
-      source.height
+      source.height ??
+      DEFAULT_PACKAGE.dimensions.height
     );
 
   const declaredValue =
@@ -262,7 +348,7 @@ async function requestCarrierRate({
   destination,
   packageData
 }) {
-  const response =
+  const rateResponse =
     await fetch(
       ENVIA_API_URL,
       {
@@ -300,36 +386,63 @@ async function requestCarrierRate({
       }
     );
 
-  let data;
+  const rawText =
+    await rateResponse.text();
+
+  let data = null;
 
   try {
-    data = await response.json();
+    data =
+      rawText
+        ? JSON.parse(rawText)
+        : null;
   } catch {
-    data = null;
-  }
-
-  if (!response.ok) {
-    const errorMessage =
-      data?.message ||
-      data?.error ||
-      data?.meta ||
-      `Envia respondió con código ${response.status}.`;
-
     throw new Error(
-      typeof errorMessage === "string"
-        ? errorMessage
-        : JSON.stringify(errorMessage)
+      `${carrier}: Envia devolvió una respuesta no válida. Código HTTP: ${rateResponse.status}.`
     );
   }
 
-  return Array.isArray(data?.data)
-    ? data.data
-    : [];
+  if (!rateResponse.ok) {
+    const message =
+      data?.message ||
+      data?.error ||
+      data?.meta ||
+      `${carrier}: Envia respondió con código ${rateResponse.status}.`;
+
+    throw new Error(
+      typeof message === "string"
+        ? message
+        : JSON.stringify(message)
+    );
+  }
+
+  if (Array.isArray(data?.data)) {
+    return data.data;
+  }
+
+  if (
+    data?.data &&
+    typeof data.data === "object"
+  ) {
+    return [data.data];
+  }
+
+  if (Array.isArray(data)) {
+    return data;
+  }
+
+  return [];
 }
 
 function normalizeRate(rate) {
+  const possiblePrice =
+    rate.totalPrice ??
+    rate.total ??
+    rate.price ??
+    rate.cost;
+
   const totalPrice =
-    Number(rate.totalPrice);
+    Number(possiblePrice);
 
   return {
     carrier:
@@ -340,11 +453,14 @@ function normalizeRate(rate) {
 
     serviceDescription:
       rate.serviceDescription ||
+      rate.serviceName ||
       rate.service ||
       "Servicio de envío",
 
     deliveryEstimate:
       rate.deliveryEstimate ||
+      rate.deliveryTime ||
+      rate.transitDays ||
       "Tiempo de entrega por confirmar",
 
     deliveryDate:
@@ -391,7 +507,7 @@ export default async function handler(
       .status(500)
       .json({
         error:
-          "La variable privada ENVIA_TOKEN no está configurada en Vercel."
+          "La variable ENVIA_TOKEN no está disponible en este despliegue."
       });
   }
 
@@ -423,7 +539,7 @@ export default async function handler(
       );
 
     const location =
-      await validateDestinationPostalCode(
+      await getPostalCodeLocation(
         postalCode
       );
 
@@ -439,20 +555,17 @@ export default async function handler(
         DEFAULT_PACKAGE
       );
 
-    const carrierRequests =
-      CARRIERS.map(carrier => {
-        return requestCarrierRate({
-          token,
-          carrier,
-          destination:
-            normalizedDestination,
-          packageData
-        });
-      });
-
     const carrierResults =
       await Promise.allSettled(
-        carrierRequests
+        CARRIERS.map(carrier => {
+          return requestCarrierRate({
+            token,
+            carrier,
+            destination:
+              normalizedDestination,
+            packageData
+          });
+        })
       );
 
     const rates = [];
@@ -469,9 +582,16 @@ export default async function handler(
         ) {
           result.value.forEach(
             rate => {
-              rates.push(
-                normalizeRate(rate)
-              );
+              const normalizedRate =
+                normalizeRate(rate);
+
+              if (
+                normalizedRate.totalPrice > 0
+              ) {
+                rates.push(
+                  normalizedRate
+                );
+              }
             }
           );
         } else {
@@ -500,13 +620,21 @@ export default async function handler(
         .status(422)
         .json({
           error:
-            "No se encontraron servicios disponibles para ese destino.",
+            "El código postal fue validado, pero ninguna mensajería devolvió una tarifa.",
 
           details:
             errors,
 
-          validatedDestination:
-            normalizedDestination
+          validatedDestination: {
+            city:
+              normalizedDestination.city,
+
+            state:
+              normalizedDestination.state,
+
+            postalCode:
+              normalizedDestination.postalCode
+          }
         });
     }
 
@@ -545,7 +673,7 @@ export default async function handler(
       });
   } catch (error) {
     console.error(
-      "Error al cotizar con Envia:",
+      "Error detallado en shipping-rates:",
       error
     );
 
