@@ -384,7 +384,7 @@
         </p>
 
         <p>
-          El envío se calcula por separado según el destino.
+          El envío se calcula según la dirección del comprador.
 
           <button
             type="button"
@@ -515,7 +515,7 @@
 
     <div class="footer-bottom">
       © 2026 Casa Anglard. Precios sujetos a cambio.
-      Envío cotizado por separado según destino.
+      El envío se calcula según el destino.
     </div>
 
   </footer>
@@ -586,11 +586,83 @@
         </h3>
 
         <p class="shipping-copy">
-          El costo se calcula según tu ubicación y se cobra por separado.
-          Te confirmaremos el importe antes de completar la compra.
+          Captura la dirección de entrega. Consultaremos las tarifas
+          disponibles directamente con Envia.com.
         </p>
 
         <form id="shippingForm">
+
+          <label for="shippingName">
+            Nombre completo
+          </label>
+
+          <input
+            type="text"
+            id="shippingName"
+            autocomplete="name"
+            maxlength="100"
+            required
+          >
+
+          <label for="shippingPhone">
+            Teléfono
+          </label>
+
+          <input
+            type="tel"
+            id="shippingPhone"
+            autocomplete="tel"
+            maxlength="20"
+            placeholder="Ej. 5512345678"
+            required
+          >
+
+          <label for="shippingEmail">
+            Correo electrónico
+          </label>
+
+          <input
+            type="email"
+            id="shippingEmail"
+            autocomplete="email"
+            maxlength="120"
+            placeholder="Opcional"
+          >
+
+          <label for="shippingStreet">
+            Calle
+          </label>
+
+          <input
+            type="text"
+            id="shippingStreet"
+            autocomplete="address-line1"
+            maxlength="120"
+            required
+          >
+
+          <label for="shippingNumber">
+            Número exterior
+          </label>
+
+          <input
+            type="text"
+            id="shippingNumber"
+            maxlength="20"
+            required
+          >
+
+          <label for="shippingDistrict">
+            Colonia
+          </label>
+
+          <input
+            type="text"
+            id="shippingDistrict"
+            autocomplete="address-level3"
+            maxlength="100"
+            required
+          >
 
           <label for="shippingCP">
             Código postal
@@ -608,16 +680,16 @@
             required
           >
 
-          <label for="shippingCiudad">
-            Ciudad, alcaldía o municipio
+          <label for="shippingCity">
+            Alcaldía o municipio
           </label>
 
           <input
             type="text"
-            id="shippingCiudad"
+            id="shippingCity"
             autocomplete="address-level2"
-            maxlength="80"
-            placeholder="Ej. Ciudad de México"
+            maxlength="100"
+            placeholder="Se validará con el código postal"
             required
           >
 
@@ -626,13 +698,26 @@
             class="btn btn-dark"
             id="shippingSubmit"
           >
-            Solicitar costo de envío
+            Calcular envío
           </button>
 
         </form>
 
+        <div
+          id="shippingStatus"
+          class="shipping-copy"
+          role="status"
+          aria-live="polite"
+          style="margin-top: 16px;"
+        ></div>
+
+        <div
+          id="shippingResults"
+          style="margin-top: 14px;"
+        ></div>
+
         <p class="shipping-disclaimer">
-          Tu solicitud se enviará por WhatsApp.
+          La cotización se obtiene directamente de Envia.com.
         </p>
 
       </div>
@@ -681,11 +766,19 @@
       ></div>
 
       <div
+        id="selectedShippingSummary"
+        class="shipping-copy"
+        style="font-size: 12px; margin-bottom: 20px;"
+      >
+        Aún no has seleccionado una opción de envío.
+      </div>
+
+      <div
         style="margin: 16px 0; display: flex; justify-content: space-between; font-weight: 700; font-size: 16px;"
       >
 
         <span>
-          Subtotal:
+          Total:
         </span>
 
         <span id="cartSubtotal">
@@ -693,13 +786,6 @@
         </span>
 
       </div>
-
-      <p
-        class="shipping-copy"
-        style="font-size: 12px; margin-bottom: 20px;"
-      >
-        El costo de envío se confirmará por separado antes del pago.
-      </p>
 
       <button
         type="button"

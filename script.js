@@ -1,56 +1,127 @@
 (function () {
   "use strict";
 
-  const STRIPE_CHECKOUT_ENDPOINT = "/api/create-checkout-session";
-  const WHATSAPP_NUMBER = "525637091144";
-  const CART_STORAGE_KEY = "casa_anglard_cart";
+  const STRIPE_CHECKOUT_ENDPOINT =
+    "/api/create-checkout-session";
 
-  const grid = document.getElementById("productGrid");
-  const count = document.getElementById("count");
-  const filterBtns = document.querySelectorAll(".filter-btn");
+  const SHIPPING_RATES_ENDPOINT =
+    "/api/shipping-rates";
 
-  const modal = document.getElementById("modal");
-  const modalOverlay = document.getElementById("modalOverlay");
-  const modalBody = document.getElementById("modalBody");
-  const modalClose = document.getElementById("modalClose");
+  const GEOCODES_ENDPOINT =
+    "https://geocodes.envia.com/zipcode/MX";
 
-  const shippingModal = document.getElementById("shippingModal");
-  const shippingOverlay = document.getElementById("shippingOverlay");
-  const shippingClose = document.getElementById("shippingClose");
-  const shippingForm = document.getElementById("shippingForm");
+  const WHATSAPP_NUMBER =
+    "525637091144";
 
-  const cartDrawer = document.getElementById("cartDrawer");
-  const cartOverlay = document.getElementById("cartOverlay");
-  const cartClose = document.getElementById("cartClose");
-  const cartItemsList = document.getElementById("cartItemsList");
-  const cartSubtotal = document.getElementById("cartSubtotal");
-  const cartCountGlobal = document.getElementById("cartCountGlobal");
-  const cartCountMobile = document.getElementById("cartCountMobile");
-  const checkoutBtn = document.getElementById("checkoutBtn");
+  const CART_STORAGE_KEY =
+    "casa_anglard_cart";
 
-  const zoomOverlay = document.getElementById("zoomOverlay");
-  const zoomModal = document.getElementById("zoomModal");
-  const zoomImage = document.getElementById("zoomImage");
-  const zoomClose = document.getElementById("zoomClose");
+  const grid =
+    document.getElementById("productGrid");
 
-  const currencyFormatter = new Intl.NumberFormat("es-MX", {
-    style: "currency",
-    currency: "MXN",
-    minimumFractionDigits: 0
-  });
+  const count =
+    document.getElementById("count");
+
+  const filterBtns =
+    document.querySelectorAll(".filter-btn");
+
+  const modal =
+    document.getElementById("modal");
+
+  const modalOverlay =
+    document.getElementById("modalOverlay");
+
+  const modalBody =
+    document.getElementById("modalBody");
+
+  const modalClose =
+    document.getElementById("modalClose");
+
+  const shippingModal =
+    document.getElementById("shippingModal");
+
+  const shippingOverlay =
+    document.getElementById("shippingOverlay");
+
+  const shippingClose =
+    document.getElementById("shippingClose");
+
+  const shippingForm =
+    document.getElementById("shippingForm");
+
+  const shippingSubmit =
+    document.getElementById("shippingSubmit");
+
+  const shippingStatus =
+    document.getElementById("shippingStatus");
+
+  const shippingResults =
+    document.getElementById("shippingResults");
+
+  const cartDrawer =
+    document.getElementById("cartDrawer");
+
+  const cartOverlay =
+    document.getElementById("cartOverlay");
+
+  const cartClose =
+    document.getElementById("cartClose");
+
+  const cartItemsList =
+    document.getElementById("cartItemsList");
+
+  const cartSubtotal =
+    document.getElementById("cartSubtotal");
+
+  const cartCountGlobal =
+    document.getElementById("cartCountGlobal");
+
+  const cartCountMobile =
+    document.getElementById("cartCountMobile");
+
+  const checkoutBtn =
+    document.getElementById("checkoutBtn");
+
+  const selectedShippingSummary =
+    document.getElementById(
+      "selectedShippingSummary"
+    );
+
+  const zoomOverlay =
+    document.getElementById("zoomOverlay");
+
+  const zoomModal =
+    document.getElementById("zoomModal");
+
+  const zoomImage =
+    document.getElementById("zoomImage");
+
+  const zoomClose =
+    document.getElementById("zoomClose");
+
+  const currencyFormatter =
+    new Intl.NumberFormat("es-MX", {
+      style: "currency",
+      currency: "MXN",
+      minimumFractionDigits: 0
+    });
 
   let activeFilter = "all";
   let cart = loadCart();
+  let selectedShipping = null;
+  let lastShippingDestination = null;
 
   function loadCart() {
     try {
-      const storedCart = localStorage.getItem(CART_STORAGE_KEY);
+      const storedCart =
+        localStorage.getItem(CART_STORAGE_KEY);
 
       if (!storedCart) {
         return [];
       }
 
-      const parsedCart = JSON.parse(storedCart);
+      const parsedCart =
+        JSON.parse(storedCart);
 
       return Array.isArray(parsedCart)
         ? parsedCart
@@ -61,21 +132,32 @@
         error
       );
 
-      localStorage.removeItem(CART_STORAGE_KEY);
+      localStorage.removeItem(
+        CART_STORAGE_KEY
+      );
 
       return [];
     }
   }
 
   function saveCart() {
-    localStorage.setItem(
-      CART_STORAGE_KEY,
-      JSON.stringify(cart)
-    );
+    try {
+      localStorage.setItem(
+        CART_STORAGE_KEY,
+        JSON.stringify(cart)
+      );
+    } catch (error) {
+      console.warn(
+        "No fue posible guardar la bolsa.",
+        error
+      );
+    }
   }
 
   function formatCurrency(value) {
-    return currencyFormatter.format(value);
+    return currencyFormatter.format(
+      Number(value || 0)
+    );
   }
 
   function getProduct(productId) {
@@ -84,7 +166,10 @@
     );
   }
 
-  function getVariant(product, variantId) {
+  function getVariant(
+    product,
+    variantId
+  ) {
     if (
       !product ||
       !Array.isArray(product.variants)
@@ -92,26 +177,36 @@
       return null;
     }
 
-    return product.variants.find(
-      variant => variant.id === variantId
-    ) || null;
+    return (
+      product.variants.find(
+        variant => variant.id === variantId
+      ) || null
+    );
   }
 
   function getProductPriceLabel(product) {
-    if (typeof product.price === "number") {
-      return formatCurrency(product.price);
+    if (
+      typeof product.price === "number"
+    ) {
+      return formatCurrency(
+        product.price
+      );
     }
 
     if (
       Array.isArray(product.variants) &&
       product.variants.length > 0
     ) {
-      const prices = product.variants.map(
-        variant => variant.price
-      );
+      const prices =
+        product.variants.map(
+          variant => variant.price
+        );
 
-      const minimum = Math.min(...prices);
-      const maximum = Math.max(...prices);
+      const minimum =
+        Math.min(...prices);
+
+      const maximum =
+        Math.max(...prices);
 
       return minimum === maximum
         ? formatCurrency(minimum)
@@ -122,16 +217,18 @@
   }
 
   function getCartItemUnitPrice(item) {
-    const product = getProduct(item.productId);
+    const product =
+      getProduct(item.productId);
 
     if (!product) {
       return 0;
     }
 
-    const variant = getVariant(
-      product,
-      item.variantId
-    );
+    const variant =
+      getVariant(
+        product,
+        item.variantId
+      );
 
     if (variant) {
       return variant.price;
@@ -143,52 +240,110 @@
   }
 
   function getCartItemLabel(item) {
-    const product = getProduct(item.productId);
+    const product =
+      getProduct(item.productId);
 
     if (!product) {
       return "";
     }
 
-    const variant = getVariant(
-      product,
-      item.variantId
-    );
+    const variant =
+      getVariant(
+        product,
+        item.variantId
+      );
 
     return variant
       ? `${product.name} — ${variant.name}`
       : product.name;
   }
 
-  function openZoom(imgSrc, altText) {
-    zoomImage.src = imgSrc;
-    zoomImage.alt =
-      altText || "Imagen ampliada del producto";
+  function getCartProductsSubtotal() {
+    return cart.reduce(
+      (total, item) => {
+        return (
+          total +
+          getCartItemUnitPrice(item) *
+          item.quantity
+        );
+      },
+      0
+    );
+  }
 
-    zoomModal.style.display = "block";
-    zoomModal.setAttribute("aria-hidden", "false");
-    zoomOverlay.classList.add("open");
+  function invalidateShipping() {
+    selectedShipping = null;
+    lastShippingDestination = null;
+
+    shippingResults.innerHTML = "";
+    shippingStatus.textContent = "";
+
+    if (selectedShippingSummary) {
+      selectedShippingSummary.textContent =
+        "Aún no has seleccionado una opción de envío.";
+    }
+  }
+
+  function openZoom(
+    imgSrc,
+    altText
+  ) {
+    zoomImage.src =
+      imgSrc;
+
+    zoomImage.alt =
+      altText ||
+      "Imagen ampliada del producto";
+
+    zoomModal.style.display =
+      "block";
+
+    zoomModal.setAttribute(
+      "aria-hidden",
+      "false"
+    );
+
+    zoomOverlay.classList.add(
+      "open"
+    );
 
     zoomClose.focus();
   }
 
   function closeZoom() {
-    zoomModal.style.display = "none";
-    zoomModal.setAttribute("aria-hidden", "true");
-    zoomOverlay.classList.remove("open");
+    zoomModal.style.display =
+      "none";
+
+    zoomModal.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+    zoomOverlay.classList.remove(
+      "open"
+    );
   }
 
   function updateCartDOM() {
     saveCart();
 
-    const totalItems = cart.reduce(
-      (total, item) => total + item.quantity,
-      0
-    );
+    const totalItems =
+      cart.reduce(
+        (total, item) =>
+          total + item.quantity,
+        0
+      );
 
-    cartCountGlobal.textContent = totalItems;
-    cartCountMobile.textContent = totalItems;
+    cartCountGlobal.textContent =
+      totalItems;
+
+    cartCountMobile.textContent =
+      totalItems;
 
     if (cart.length === 0) {
+      selectedShipping = null;
+      lastShippingDestination = null;
+
       cartItemsList.innerHTML = `
         <p
           class="shipping-copy"
@@ -198,27 +353,37 @@
         </p>
       `;
 
-      cartSubtotal.textContent = formatCurrency(0);
+      selectedShippingSummary.textContent =
+        "Aún no has seleccionado una opción de envío.";
 
-      checkoutBtn.disabled = true;
-      checkoutBtn.textContent = "Tu bolsa está vacía";
+      cartSubtotal.textContent =
+        formatCurrency(0);
+
+      checkoutBtn.disabled =
+        true;
+
+      checkoutBtn.textContent =
+        "Tu bolsa está vacía";
 
       return;
     }
 
     let subtotal = 0;
 
-    cartItemsList.innerHTML = cart
-      .map((item, index) => {
-        const product = getProduct(item.productId);
+    cartItemsList.innerHTML =
+      cart.map((item, index) => {
+        const product =
+          getProduct(item.productId);
 
         if (!product) {
           return "";
         }
 
-        const unitPrice = getCartItemUnitPrice(item);
+        const unitPrice =
+          getCartItemUnitPrice(item);
 
-        subtotal += unitPrice * item.quantity;
+        subtotal +=
+          unitPrice * item.quantity;
 
         return `
           <div
@@ -242,6 +407,7 @@
               <div
                 style="display:flex; align-items:center; gap:9px;"
               >
+
                 <button
                   type="button"
                   class="filter-btn"
@@ -253,7 +419,9 @@
                   −
                 </button>
 
-                <span>${item.quantity}</span>
+                <span>
+                  ${item.quantity}
+                </span>
 
                 <button
                   type="button"
@@ -265,6 +433,7 @@
                 >
                   +
                 </button>
+
               </div>
 
               <button
@@ -276,55 +445,99 @@
               >
                 Quitar
               </button>
+
             </div>
+
           </div>
         `;
-      })
-      .join("");
+      }).join("");
+
+    if (selectedShipping) {
+      selectedShippingSummary.innerHTML = `
+        <strong>
+          Envío seleccionado:
+        </strong>
+
+        <br>
+
+        ${selectedShipping.carrier.toUpperCase()}
+        —
+        ${selectedShipping.serviceDescription}
+
+        <br>
+
+        ${formatCurrency(
+          selectedShipping.totalPrice
+        )}
+        ·
+        ${selectedShipping.deliveryEstimate}
+      `;
+    } else {
+      selectedShippingSummary.textContent =
+        "Aún no has seleccionado una opción de envío.";
+    }
+
+    const shippingPrice =
+      selectedShipping
+        ? selectedShipping.totalPrice
+        : 0;
 
     cartSubtotal.textContent =
-      formatCurrency(subtotal);
+      formatCurrency(
+        subtotal + shippingPrice
+      );
 
-    checkoutBtn.disabled = false;
+    checkoutBtn.disabled =
+      false;
+
     checkoutBtn.textContent =
       "Pagar de forma segura con Stripe";
 
     cartItemsList
-      .querySelectorAll("[data-cart-action]")
+      .querySelectorAll(
+        "[data-cart-action]"
+      )
       .forEach(button => {
-        button.addEventListener("click", () => {
-          const index = Number(
-            button.dataset.cartIndex
-          );
+        button.addEventListener(
+          "click",
+          () => {
+            const index =
+              Number(
+                button.dataset.cartIndex
+              );
 
-          const action =
-            button.dataset.cartAction;
+            const action =
+              button.dataset.cartAction;
 
-          if (
-            !Number.isInteger(index) ||
-            !cart[index]
-          ) {
-            return;
-          }
+            if (
+              !Number.isInteger(index) ||
+              !cart[index]
+            ) {
+              return;
+            }
 
-          if (action === "increase") {
-            cart[index].quantity += 1;
-          }
+            if (action === "increase") {
+              cart[index].quantity += 1;
+            }
 
-          if (action === "decrease") {
-            cart[index].quantity -= 1;
+            if (action === "decrease") {
+              cart[index].quantity -= 1;
 
-            if (cart[index].quantity <= 0) {
+              if (
+                cart[index].quantity <= 0
+              ) {
+                cart.splice(index, 1);
+              }
+            }
+
+            if (action === "remove") {
               cart.splice(index, 1);
             }
-          }
 
-          if (action === "remove") {
-            cart.splice(index, 1);
+            invalidateShipping();
+            updateCartDOM();
           }
-
-          updateCartDOM();
-        });
+        );
       });
   }
 
@@ -332,7 +545,8 @@
     productId,
     variantId = null
   ) {
-    const product = getProduct(productId);
+    const product =
+      getProduct(productId);
 
     if (!product) {
       return;
@@ -341,9 +555,10 @@
     const itemKey =
       `${productId}:${variantId || "default"}`;
 
-    const existingItem = cart.find(
-      item => item.key === itemKey
-    );
+    const existingItem =
+      cart.find(
+        item => item.key === itemKey
+      );
 
     if (existingItem) {
       existingItem.quantity += 1;
@@ -356,6 +571,7 @@
       });
     }
 
+    invalidateShipping();
     updateCartDOM();
     closeModal();
     openCartDrawer();
@@ -370,8 +586,12 @@
       "false"
     );
 
-    cartOverlay.classList.add("open");
-    document.body.style.overflow = "hidden";
+    cartOverlay.classList.add(
+      "open"
+    );
+
+    document.body.style.overflow =
+      "hidden";
 
     cartClose.focus();
   }
@@ -385,8 +605,12 @@
       "true"
     );
 
-    cartOverlay.classList.remove("open");
-    document.body.style.overflow = "";
+    cartOverlay.classList.remove(
+      "open"
+    );
+
+    document.body.style.overflow =
+      "";
   }
 
   async function checkoutWithStripe() {
@@ -394,31 +618,83 @@
       return;
     }
 
-    checkoutBtn.disabled = true;
+    if (
+      !selectedShipping ||
+      !lastShippingDestination
+    ) {
+      closeCartDrawer();
+      openShippingModal();
+
+      shippingStatus.textContent =
+        "Calcula y selecciona una opción de envío antes de pagar.";
+
+      return;
+    }
+
+    checkoutBtn.disabled =
+      true;
+
     checkoutBtn.textContent =
       "Preparando pago…";
 
     try {
-      const response = await fetch(
-        STRIPE_CHECKOUT_ENDPOINT,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            items: cart.map(item => ({
-              productId: item.productId,
-              variantId: item.variantId,
-              quantity: item.quantity
-            }))
-          })
-        }
-      );
+      const response =
+        await fetch(
+          STRIPE_CHECKOUT_ENDPOINT,
+          {
+            method: "POST",
 
-      const data = await response
-        .json()
-        .catch(() => ({}));
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body: JSON.stringify({
+              items: cart.map(
+                item => ({
+                  productId:
+                    item.productId,
+
+                  variantId:
+                    item.variantId,
+
+                  quantity:
+                    item.quantity
+                })
+              ),
+
+              shipping: {
+                carrier:
+                  selectedShipping.carrier,
+
+                service:
+                  selectedShipping.service,
+
+                serviceDescription:
+                  selectedShipping
+                    .serviceDescription,
+
+                deliveryEstimate:
+                  selectedShipping
+                    .deliveryEstimate,
+
+                totalPrice:
+                  selectedShipping.totalPrice,
+
+                currency:
+                  selectedShipping.currency,
+
+                destination:
+                  lastShippingDestination
+              }
+            })
+          }
+        );
+
+      const data =
+        await response
+          .json()
+          .catch(() => ({}));
 
       if (!response.ok) {
         throw new Error(
@@ -433,17 +709,19 @@
         );
       }
 
-      window.location.href = data.url;
+      window.location.href =
+        data.url;
     } catch (error) {
       console.error(error);
 
       alert(
-        "No pudimos iniciar el pago con Stripe.\n\n" +
-        "La tienda necesita tener activo el endpoint " +
-        "\"/api/create-checkout-session\" en Vercel."
+        error.message ||
+        "No pudimos iniciar el pago con Stripe."
       );
     } finally {
-      checkoutBtn.disabled = false;
+      checkoutBtn.disabled =
+        false;
+
       checkoutBtn.textContent =
         "Pagar de forma segura con Stripe";
     }
@@ -458,10 +736,12 @@
         tabindex="0"
         aria-label="Ver ${product.name}"
       >
+
         <div
           class="thumb"
           style="position:relative;"
         >
+
           <img
             src="${product.img}"
             alt="${product.name}"
@@ -478,9 +758,11 @@
           >
             🔍 Zoom
           </button>
+
         </div>
 
         <div class="info">
+
           <span class="cat-label">
             ${product.categoryLabel}
           </span>
@@ -495,11 +777,14 @@
 
           <div class="price">
             ${getProductPriceLabel(product)}
+
             <span class="ship-note">
               + envío
             </span>
           </div>
+
         </div>
+
       </article>
     `;
   }
@@ -510,16 +795,20 @@
         ? PRODUCTS
         : PRODUCTS.filter(
             product =>
-              product.category === activeFilter
+              product.category ===
+              activeFilter
           );
 
     grid.innerHTML =
       list.map(cardHTML).join("");
 
-    count.textContent = list.length;
+    count.textContent =
+      list.length;
 
     grid
-      .querySelectorAll(".product-card")
+      .querySelectorAll(
+        ".product-card"
+      )
       .forEach(card => {
         card.addEventListener(
           "click",
@@ -532,7 +821,9 @@
               return;
             }
 
-            openModal(card.dataset.id);
+            openModal(
+              card.dataset.id
+            );
           }
         );
 
@@ -544,14 +835,19 @@
               event.key === " "
             ) {
               event.preventDefault();
-              openModal(card.dataset.id);
+
+              openModal(
+                card.dataset.id
+              );
             }
           }
         );
       });
 
     grid
-      .querySelectorAll(".zoom-trigger-btn")
+      .querySelectorAll(
+        ".zoom-trigger-btn"
+      )
       .forEach(button => {
         button.addEventListener(
           "click",
@@ -568,7 +864,8 @@
   }
 
   function openModal(productId) {
-    const product = getProduct(productId);
+    const product =
+      getProduct(productId);
 
     if (!product) {
       return;
@@ -595,16 +892,23 @@
             id="variantSelector"
             style="width:100%; padding:11px 13px; border:1px solid var(--border); background:white; font-family:var(--font-body); margin-bottom:14px;"
           >
+
             ${product.variants
               .map(
                 variant => `
-                  <option value="${variant.id}">
-                    ${variant.name} —
-                    ${formatCurrency(variant.price)}
+                  <option
+                    value="${variant.id}"
+                  >
+                    ${variant.name}
+                    —
+                    ${formatCurrency(
+                      variant.price
+                    )}
                   </option>
                 `
               )
               .join("")}
+
           </select>
         `
         : "";
@@ -632,6 +936,7 @@
         id="modalImgContainer"
         style="position:relative; background:var(--teal-soft); cursor:zoom-in;"
       >
+
         <img
           class="modal-img"
           src="${product.img}"
@@ -643,20 +948,27 @@
         >
           Click para ampliar
         </div>
+
       </div>
 
       <div class="modal-info">
+
         <span class="cat-label">
           ${product.categoryLabel}
         </span>
 
-        <h3>${product.name}</h3>
+        <h3>
+          ${product.name}
+        </h3>
 
         <div class="price">
+
           ${getProductPriceLabel(product)}
+
           <span class="ship-note">
             + envío
           </span>
+
         </div>
 
         <p
@@ -666,21 +978,34 @@
         </p>
 
         <dl>
+
           <div>
-            <dt>Medidas / tallas</dt>
-            <dd>${product.medidas}</dd>
+            <dt>
+              Medidas / tallas
+            </dt>
+
+            <dd>
+              ${product.medidas}
+            </dd>
           </div>
 
           <div>
-            <dt>Material / notas</dt>
-            <dd>${product.material}</dd>
+            <dt>
+              Material / notas
+            </dt>
+
+            <dd>
+              ${product.material}
+            </dd>
           </div>
+
         </dl>
 
         ${variantSelectorHTML}
         ${purchaseButtonHTML}
 
         <div class="modal-actions">
+
           <a
             class="btn btn-outline"
             href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
@@ -700,12 +1025,16 @@
           >
             Cotizar envío para esta pieza →
           </button>
+
         </div>
+
       </div>
     `;
 
     document
-      .getElementById("modalImgContainer")
+      .getElementById(
+        "modalImgContainer"
+      )
       .addEventListener(
         "click",
         () => {
@@ -758,80 +1087,274 @@
       );
     }
 
-    modal.classList.add("open");
+    modal.classList.add(
+      "open"
+    );
 
     modal.setAttribute(
       "aria-hidden",
       "false"
     );
 
-    modalOverlay.classList.add("open");
-    document.body.style.overflow = "hidden";
+    modalOverlay.classList.add(
+      "open"
+    );
+
+    document.body.style.overflow =
+      "hidden";
 
     modalClose.focus();
   }
 
   function closeModal() {
-    modal.classList.remove("open");
+    modal.classList.remove(
+      "open"
+    );
 
     modal.setAttribute(
       "aria-hidden",
       "true"
     );
 
-    modalOverlay.classList.remove("open");
-    document.body.style.overflow = "";
+    modalOverlay.classList.remove(
+      "open"
+    );
+
+    document.body.style.overflow =
+      "";
   }
 
   function openShippingModal() {
-    shippingModal.classList.add("open");
+    shippingModal.classList.add(
+      "open"
+    );
 
     shippingModal.setAttribute(
       "aria-hidden",
       "false"
     );
 
-    shippingOverlay.classList.add("open");
-    document.body.style.overflow = "hidden";
+    shippingOverlay.classList.add(
+      "open"
+    );
+
+    document.body.style.overflow =
+      "hidden";
 
     shippingClose.focus();
   }
 
   function closeShippingModal() {
-    shippingModal.classList.remove("open");
+    shippingModal.classList.remove(
+      "open"
+    );
 
     shippingModal.setAttribute(
       "aria-hidden",
       "true"
     );
 
-    shippingOverlay.classList.remove("open");
-    document.body.style.overflow = "";
+    shippingOverlay.classList.remove(
+      "open"
+    );
+
+    document.body.style.overflow =
+      "";
+  }
+
+  async function validatePostalCode(
+    postalCode
+  ) {
+    const response =
+      await fetch(
+        `${GEOCODES_ENDPOINT}/${encodeURIComponent(
+          postalCode
+        )}`
+      );
+
+    const data =
+      await response
+        .json()
+        .catch(() => ({}));
+
+    if (
+      !response.ok ||
+      !data?.success ||
+      !data?.data
+    ) {
+      throw new Error(
+        "No fue posible validar ese código postal."
+      );
+    }
+
+    return data.data;
+  }
+
+  function normalizePhone(phone) {
+    const digits =
+      String(phone || "")
+        .replace(/\D/g, "");
+
+    if (digits.length === 10) {
+      return `+52${digits}`;
+    }
+
+    if (
+      digits.startsWith("52") &&
+      digits.length === 12
+    ) {
+      return `+${digits}`;
+    }
+
+    return String(phone || "").trim();
+  }
+
+  function renderShippingRates(rates) {
+    shippingResults.innerHTML =
+      rates.map((rate, index) => `
+        <label
+          style="display:block; border:1px solid var(--border); padding:14px; margin-bottom:10px; cursor:pointer; background:white;"
+        >
+
+          <div
+            style="display:flex; gap:10px; align-items:flex-start;"
+          >
+
+            <input
+              type="radio"
+              name="shippingRate"
+              value="${index}"
+              style="margin-top:4px;"
+            >
+
+            <span
+              style="display:block; flex:1;"
+            >
+
+              <strong
+                style="display:block; color:var(--ink);"
+              >
+                ${String(
+                  rate.carrier ||
+                  "Mensajería"
+                ).toUpperCase()}
+              </strong>
+
+              <span
+                style="display:block; margin-top:3px;"
+              >
+                ${
+                  rate.serviceDescription ||
+                  rate.service ||
+                  "Servicio"
+                }
+              </span>
+
+              <span
+                style="display:block; color:var(--muted); font-size:12px; margin-top:3px;"
+              >
+                ${
+                  rate.deliveryEstimate ||
+                  "Entrega por confirmar"
+                }
+              </span>
+
+            </span>
+
+            <strong>
+              ${formatCurrency(
+                Number(
+                  rate.totalPrice || 0
+                )
+              )}
+            </strong>
+
+          </div>
+
+        </label>
+      `).join("");
+
+    shippingResults
+      .querySelectorAll(
+        'input[name="shippingRate"]'
+      )
+      .forEach(input => {
+        input.addEventListener(
+          "change",
+          () => {
+            const rate =
+              rates[
+                Number(input.value)
+              ];
+
+            selectedShipping = {
+              carrier:
+                rate.carrier || "",
+
+              service:
+                rate.service || "",
+
+              serviceDescription:
+                rate.serviceDescription ||
+                rate.service ||
+                "Servicio de envío",
+
+              deliveryEstimate:
+                rate.deliveryEstimate ||
+                "Entrega por confirmar",
+
+              deliveryDate:
+                rate.deliveryDate || null,
+
+              totalPrice:
+                Number(
+                  rate.totalPrice || 0
+                ),
+
+              currency:
+                rate.currency || "MXN"
+            };
+
+            shippingStatus.textContent =
+              "Opción de envío seleccionada. Ya puedes continuar al pago.";
+
+            updateCartDOM();
+          }
+        );
+      });
   }
 
   document
-    .getElementById("openCartBtn")
+    .getElementById(
+      "openCartBtn"
+    )
     .addEventListener(
       "click",
       openCartDrawer
     );
 
   document
-    .getElementById("openCartBtnMobile")
+    .getElementById(
+      "openCartBtnMobile"
+    )
     .addEventListener(
       "click",
       openCartDrawer
     );
 
   document
-    .getElementById("openShippingBtnHeader")
+    .getElementById(
+      "openShippingBtnHeader"
+    )
     .addEventListener(
       "click",
       openShippingModal
     );
 
   document
-    .getElementById("openShippingBtnNote")
+    .getElementById(
+      "openShippingBtnNote"
+    )
     .addEventListener(
       "click",
       openShippingModal
@@ -841,12 +1364,19 @@
     button.addEventListener(
       "click",
       () => {
-        filterBtns.forEach(item => {
-          item.classList.remove("active");
-        });
+        filterBtns.forEach(
+          item =>
+            item.classList.remove(
+              "active"
+            )
+        );
 
-        button.classList.add("active");
-        activeFilter = button.dataset.filter;
+        button.classList.add(
+          "active"
+        );
+
+        activeFilter =
+          button.dataset.filter;
 
         render();
       }
@@ -905,62 +1435,198 @@
 
   shippingForm.addEventListener(
     "submit",
-    event => {
+    async event => {
       event.preventDefault();
 
       const postalCode =
         document
-          .getElementById("shippingCP")
+          .getElementById(
+            "shippingCP"
+          )
           .value
           .trim();
 
-      const city =
-        document
-          .getElementById("shippingCiudad")
-          .value
-          .trim();
-
-      if (!/^\d{5}$/.test(postalCode)) {
-        alert(
-          "Escribe un código postal mexicano de cinco dígitos."
+      const cityInput =
+        document.getElementById(
+          "shippingCity"
         );
+
+      if (
+        !/^\d{5}$/.test(
+          postalCode
+        )
+      ) {
+        shippingStatus.textContent =
+          "Escribe un código postal mexicano de cinco dígitos.";
 
         return;
       }
 
-      if (city.length < 3) {
-        alert(
-          "Escribe tu ciudad, alcaldía o municipio."
-        );
+      shippingSubmit.disabled =
+        true;
 
-        return;
-      }
+      shippingSubmit.textContent =
+        "Calculando…";
 
-      const cartSummary =
-        cart.length > 0
-          ? cart
-              .map(item => {
-                return (
-                  `• ${item.quantity} × ` +
-                  `${getCartItemLabel(item)}`
-                );
+      shippingStatus.textContent =
+        "Validando dirección y consultando mensajerías…";
+
+      shippingResults.innerHTML =
+        "";
+
+      selectedShipping =
+        null;
+
+      try {
+        const location =
+          await validatePostalCode(
+            postalCode
+          );
+
+        cityInput.value =
+          location.city ||
+          cityInput.value.trim();
+
+        const destination = {
+          name:
+            document
+              .getElementById(
+                "shippingName"
+              )
+              .value
+              .trim(),
+
+          phone:
+            normalizePhone(
+              document
+                .getElementById(
+                  "shippingPhone"
+                )
+                .value
+            ),
+
+          email:
+            document
+              .getElementById(
+                "shippingEmail"
+              )
+              .value
+              .trim(),
+
+          street:
+            `${document
+              .getElementById(
+                "shippingStreet"
+              )
+              .value
+              .trim()} ${document
+              .getElementById(
+                "shippingNumber"
+              )
+              .value
+              .trim()}`,
+
+          district:
+            document
+              .getElementById(
+                "shippingDistrict"
+              )
+              .value
+              .trim(),
+
+          city:
+            location.city ||
+            cityInput.value.trim(),
+
+          state:
+            location.state,
+
+          country:
+            "MX",
+
+          postalCode
+        };
+
+        const response =
+          await fetch(
+            SHIPPING_RATES_ENDPOINT,
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify({
+                destination
               })
-              .join("\n")
-          : "Aún no he agregado productos a la bolsa.";
+            }
+          );
 
-      const message =
-        "Hola Casa Anglard, quiero cotizar el envío de este pedido:\n\n" +
-        `${cartSummary}\n\n` +
-        `Destino: ${city}, CP ${postalCode}.`;
+        const data =
+          await response
+            .json()
+            .catch(() => ({}));
 
-      window.open(
-        `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`,
-        "_blank",
-        "noopener"
-      );
+        if (!response.ok) {
+          const carrierDetails =
+            Array.isArray(
+              data.details
+            )
+              ? data.details
+                  .map(
+                    item =>
+                      `${item.carrier}: ${item.message}`
+                  )
+                  .join(" · ")
+              : "";
 
-      closeShippingModal();
-      shippingForm.reset();
+          throw new Error(
+            [
+              data.error ||
+              "No fue posible obtener tarifas para ese destino.",
+
+              carrierDetails
+            ]
+              .filter(Boolean)
+              .join(" ")
+          );
+        }
+
+        if (
+          !Array.isArray(
+            data.rates
+          ) ||
+          data.rates.length === 0
+        ) {
+          throw new Error(
+            "No se encontraron opciones de envío para ese destino."
+          );
+        }
+
+        lastShippingDestination =
+          destination;
+
+        shippingStatus.textContent =
+          "Selecciona una opción de envío:";
+
+        renderShippingRates(
+          data.rates
+        );
+      } catch (error) {
+        console.error(error);
+
+        shippingStatus.textContent =
+          error.message ||
+          "No fue posible calcular el envío.";
+      } finally {
+        shippingSubmit.disabled =
+          false;
+
+        shippingSubmit.textContent =
+          "Calcular envío";
+      }
     }
   );
 
