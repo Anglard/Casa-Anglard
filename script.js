@@ -7,9 +7,6 @@
   const SHIPPING_RATES_ENDPOINT =
     "/api/shipping-rates";
 
-  const GEOCODES_ENDPOINT =
-    "https://geocodes.envia.com/zipcode/MX";
-
   const WHATSAPP_NUMBER =
     "525637091144";
 
@@ -114,7 +111,9 @@
   function loadCart() {
     try {
       const storedCart =
-        localStorage.getItem(CART_STORAGE_KEY);
+        localStorage.getItem(
+          CART_STORAGE_KEY
+        );
 
       if (!storedCart) {
         return [];
@@ -132,9 +131,13 @@
         error
       );
 
-      localStorage.removeItem(
-        CART_STORAGE_KEY
-      );
+      try {
+        localStorage.removeItem(
+          CART_STORAGE_KEY
+        );
+      } catch {
+        // No se realiza ninguna acción adicional.
+      }
 
       return [];
     }
@@ -160,9 +163,19 @@
     );
   }
 
+  function escapeHTML(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
   function getProduct(productId) {
     return PRODUCTS.find(
-      product => product.id === productId
+      product =>
+        product.id === productId
     );
   }
 
@@ -179,7 +192,8 @@
 
     return (
       product.variants.find(
-        variant => variant.id === variantId
+        variant =>
+          variant.id === variantId
       ) || null
     );
   }
@@ -199,7 +213,8 @@
     ) {
       const prices =
         product.variants.map(
-          variant => variant.price
+          variant =>
+            Number(variant.price)
         );
 
       const minimum =
@@ -231,7 +246,9 @@
       );
 
     if (variant) {
-      return variant.price;
+      return Number(
+        variant.price || 0
+      );
     }
 
     return typeof product.price === "number"
@@ -275,8 +292,13 @@
     selectedShipping = null;
     lastShippingDestination = null;
 
-    shippingResults.innerHTML = "";
-    shippingStatus.textContent = "";
+    if (shippingResults) {
+      shippingResults.innerHTML = "";
+    }
+
+    if (shippingStatus) {
+      shippingStatus.textContent = "";
+    }
 
     if (selectedShippingSummary) {
       selectedShippingSummary.textContent =
@@ -288,6 +310,14 @@
     imgSrc,
     altText
   ) {
+    if (
+      !zoomImage ||
+      !zoomModal ||
+      !zoomOverlay
+    ) {
+      return;
+    }
+
     zoomImage.src =
       imgSrc;
 
@@ -307,10 +337,19 @@
       "open"
     );
 
-    zoomClose.focus();
+    if (zoomClose) {
+      zoomClose.focus();
+    }
   }
 
   function closeZoom() {
+    if (
+      !zoomModal ||
+      !zoomOverlay
+    ) {
+      return;
+    }
+
     zoomModal.style.display =
       "none";
 
@@ -330,15 +369,28 @@
     const totalItems =
       cart.reduce(
         (total, item) =>
-          total + item.quantity,
+          total +
+          Number(item.quantity || 0),
         0
       );
 
-    cartCountGlobal.textContent =
-      totalItems;
+    if (cartCountGlobal) {
+      cartCountGlobal.textContent =
+        totalItems;
+    }
 
-    cartCountMobile.textContent =
-      totalItems;
+    if (cartCountMobile) {
+      cartCountMobile.textContent =
+        totalItems;
+    }
+
+    if (
+      !cartItemsList ||
+      !cartSubtotal ||
+      !checkoutBtn
+    ) {
+      return;
+    }
 
     if (cart.length === 0) {
       selectedShipping = null;
@@ -353,8 +405,10 @@
         </p>
       `;
 
-      selectedShippingSummary.textContent =
-        "Aún no has seleccionado una opción de envío.";
+      if (selectedShippingSummary) {
+        selectedShippingSummary.textContent =
+          "Aún no has seleccionado una opción de envío.";
+      }
 
       cartSubtotal.textContent =
         formatCurrency(0);
@@ -382,32 +436,60 @@
         const unitPrice =
           getCartItemUnitPrice(item);
 
+        const quantity =
+          Number(item.quantity || 1);
+
         subtotal +=
-          unitPrice * item.quantity;
+          unitPrice * quantity;
 
         return `
           <div
-            style="margin-bottom:16px; padding-bottom:14px; border-bottom:1px dashed var(--border);"
+            style="
+              margin-bottom:16px;
+              padding-bottom:14px;
+              border-bottom:1px dashed var(--border);
+            "
           >
             <strong
-              style="display:block; font-size:14px; color:var(--ink); margin-bottom:5px;"
+              style="
+                display:block;
+                font-size:14px;
+                color:var(--ink);
+                margin-bottom:5px;
+              "
             >
-              ${getCartItemLabel(item)}
+              ${escapeHTML(
+                getCartItemLabel(item)
+              )}
             </strong>
 
             <span
-              style="display:block; color:var(--muted); font-size:12.5px; margin-bottom:9px;"
+              style="
+                display:block;
+                color:var(--muted);
+                font-size:12.5px;
+                margin-bottom:9px;
+              "
             >
-              ${formatCurrency(unitPrice)} por unidad
+              ${formatCurrency(unitPrice)}
+              por unidad
             </span>
 
             <div
-              style="display:flex; align-items:center; justify-content:space-between; gap:12px;"
+              style="
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                gap:12px;
+              "
             >
               <div
-                style="display:flex; align-items:center; gap:9px;"
+                style="
+                  display:flex;
+                  align-items:center;
+                  gap:9px;
+                "
               >
-
                 <button
                   type="button"
                   class="filter-btn"
@@ -420,7 +502,7 @@
                 </button>
 
                 <span>
-                  ${item.quantity}
+                  ${quantity}
                 </span>
 
                 <button
@@ -433,7 +515,6 @@
                 >
                   +
                 </button>
-
               </div>
 
               <button
@@ -445,14 +526,15 @@
               >
                 Quitar
               </button>
-
             </div>
-
           </div>
         `;
       }).join("");
 
-    if (selectedShipping) {
+    if (
+      selectedShipping &&
+      selectedShippingSummary
+    ) {
       selectedShippingSummary.innerHTML = `
         <strong>
           Envío seleccionado:
@@ -460,9 +542,16 @@
 
         <br>
 
-        ${selectedShipping.carrier.toUpperCase()}
+        ${escapeHTML(
+          String(
+            selectedShipping.carrier ||
+            "Mensajería"
+          ).toUpperCase()
+        )}
         —
-        ${selectedShipping.serviceDescription}
+        ${escapeHTML(
+          selectedShipping.serviceDescription
+        )}
 
         <br>
 
@@ -470,16 +559,23 @@
           selectedShipping.totalPrice
         )}
         ·
-        ${selectedShipping.deliveryEstimate}
+        ${escapeHTML(
+          selectedShipping.deliveryEstimate
+        )}
       `;
-    } else {
+    } else if (
+      selectedShippingSummary
+    ) {
       selectedShippingSummary.textContent =
         "Aún no has seleccionado una opción de envío.";
     }
 
     const shippingPrice =
       selectedShipping
-        ? selectedShipping.totalPrice
+        ? Number(
+            selectedShipping.totalPrice ||
+            0
+          )
         : 0;
 
     cartSubtotal.textContent =
@@ -557,7 +653,8 @@
 
     const existingItem =
       cart.find(
-        item => item.key === itemKey
+        item =>
+          item.key === itemKey
       );
 
     if (existingItem) {
@@ -578,6 +675,13 @@
   }
 
   function openCartDrawer() {
+    if (
+      !cartDrawer ||
+      !cartOverlay
+    ) {
+      return;
+    }
+
     cartDrawer.style.transform =
       "translate(0%, -50%)";
 
@@ -593,10 +697,19 @@
     document.body.style.overflow =
       "hidden";
 
-    cartClose.focus();
+    if (cartClose) {
+      cartClose.focus();
+    }
   }
 
   function closeCartDrawer() {
+    if (
+      !cartDrawer ||
+      !cartOverlay
+    ) {
+      return;
+    }
+
     cartDrawer.style.transform =
       "translate(100%, -50%)";
 
@@ -625,8 +738,10 @@
       closeCartDrawer();
       openShippingModal();
 
-      shippingStatus.textContent =
-        "Calcula y selecciona una opción de envío antes de pagar.";
+      if (shippingStatus) {
+        shippingStatus.textContent =
+          "Calcula y selecciona una opción de envío antes de pagar.";
+      }
 
       return;
     }
@@ -677,6 +792,10 @@
                 deliveryEstimate:
                   selectedShipping
                     .deliveryEstimate,
+
+                deliveryDate:
+                  selectedShipping
+                    .deliveryDate,
 
                 totalPrice:
                   selectedShipping.totalPrice,
@@ -731,48 +850,68 @@
     return `
       <article
         class="product-card"
-        data-id="${product.id}"
-        data-category="${product.category}"
+        data-id="${escapeHTML(product.id)}"
+        data-category="${escapeHTML(
+          product.category
+        )}"
         tabindex="0"
-        aria-label="Ver ${product.name}"
+        aria-label="Ver ${escapeHTML(
+          product.name
+        )}"
       >
-
         <div
           class="thumb"
           style="position:relative;"
         >
-
           <img
-            src="${product.img}"
-            alt="${product.name}"
+            src="${escapeHTML(product.img)}"
+            alt="${escapeHTML(product.name)}"
             loading="lazy"
           >
 
           <button
             type="button"
             class="zoom-trigger-btn"
-            data-zoom-src="${product.img}"
-            data-zoom-alt="${product.name}"
-            aria-label="Ampliar imagen de ${product.name}"
-            style="position:absolute; bottom:8px; right:8px; background:rgba(255,255,255,0.9); border:1px solid var(--border); padding:4px 8px; font-size:11px; font-family:var(--font-mono); cursor:pointer; border-radius:2px; z-index:10;"
+            data-zoom-src="${escapeHTML(
+              product.img
+            )}"
+            data-zoom-alt="${escapeHTML(
+              product.name
+            )}"
+            aria-label="Ampliar imagen de ${escapeHTML(
+              product.name
+            )}"
+            style="
+              position:absolute;
+              bottom:8px;
+              right:8px;
+              background:rgba(255,255,255,0.9);
+              border:1px solid var(--border);
+              padding:4px 8px;
+              font-size:11px;
+              font-family:var(--font-mono);
+              cursor:pointer;
+              border-radius:2px;
+              z-index:10;
+            "
           >
             🔍 Zoom
           </button>
-
         </div>
 
         <div class="info">
-
           <span class="cat-label">
-            ${product.categoryLabel}
+            ${escapeHTML(
+              product.categoryLabel
+            )}
           </span>
 
           <div class="name">
-            ${product.name}
+            ${escapeHTML(product.name)}
           </div>
 
           <div class="meta">
-            ${product.medidas}
+            ${escapeHTML(product.medidas)}
           </div>
 
           <div class="price">
@@ -782,14 +921,16 @@
               + envío
             </span>
           </div>
-
         </div>
-
       </article>
     `;
   }
 
   function render() {
+    if (!grid || !count) {
+      return;
+    }
+
     const list =
       activeFilter === "all"
         ? PRODUCTS
@@ -867,7 +1008,12 @@
     const product =
       getProduct(productId);
 
-    if (!product) {
+    if (
+      !product ||
+      !modal ||
+      !modalBody ||
+      !modalOverlay
+    ) {
       return;
     }
 
@@ -883,23 +1029,38 @@
         ? `
           <label
             for="variantSelector"
-            style="display:block; font-size:12px; color:var(--muted); margin:14px 0 6px;"
+            style="
+              display:block;
+              font-size:12px;
+              color:var(--muted);
+              margin:14px 0 6px;
+            "
           >
             Elige una presentación
           </label>
 
           <select
             id="variantSelector"
-            style="width:100%; padding:11px 13px; border:1px solid var(--border); background:white; font-family:var(--font-body); margin-bottom:14px;"
+            style="
+              width:100%;
+              padding:11px 13px;
+              border:1px solid var(--border);
+              background:white;
+              font-family:var(--font-body);
+              margin-bottom:14px;
+            "
           >
-
             ${product.variants
               .map(
                 variant => `
                   <option
-                    value="${variant.id}"
+                    value="${escapeHTML(
+                      variant.id
+                    )}"
                   >
-                    ${variant.name}
+                    ${escapeHTML(
+                      variant.name
+                    )}
                     —
                     ${formatCurrency(
                       variant.price
@@ -908,7 +1069,6 @@
                 `
               )
               .join("")}
-
           </select>
         `
         : "";
@@ -920,7 +1080,11 @@
             type="button"
             class="btn btn-dark"
             id="addToCartModalBtn"
-            style="width:100%; margin-bottom:12px; font-weight:600;"
+            style="
+              width:100%;
+              margin-bottom:12px;
+              font-weight:600;
+            "
           >
             Añadir a mi bolsa
           </button>
@@ -934,58 +1098,73 @@
     modalBody.innerHTML = `
       <div
         id="modalImgContainer"
-        style="position:relative; background:var(--teal-soft); cursor:zoom-in;"
+        style="
+          position:relative;
+          background:var(--teal-soft);
+          cursor:zoom-in;
+        "
       >
-
         <img
           class="modal-img"
-          src="${product.img}"
-          alt="${product.name}"
+          src="${escapeHTML(product.img)}"
+          alt="${escapeHTML(product.name)}"
         >
 
         <div
-          style="position:absolute; top:12px; left:12px; background:rgba(255,255,255,0.9); padding:4px 8px; font-size:11px; font-family:var(--font-mono); border:1px solid var(--border);"
+          style="
+            position:absolute;
+            top:12px;
+            left:12px;
+            background:rgba(255,255,255,0.9);
+            padding:4px 8px;
+            font-size:11px;
+            font-family:var(--font-mono);
+            border:1px solid var(--border);
+          "
         >
           Click para ampliar
         </div>
-
       </div>
 
       <div class="modal-info">
-
         <span class="cat-label">
-          ${product.categoryLabel}
+          ${escapeHTML(
+            product.categoryLabel
+          )}
         </span>
 
         <h3>
-          ${product.name}
+          ${escapeHTML(product.name)}
         </h3>
 
         <div class="price">
-
           ${getProductPriceLabel(product)}
 
           <span class="ship-note">
             + envío
           </span>
-
         </div>
 
         <p
-          style="font-size:14px; line-height:1.6; color:var(--muted);"
+          style="
+            font-size:14px;
+            line-height:1.6;
+            color:var(--muted);
+          "
         >
-          ${product.description || ""}
+          ${escapeHTML(
+            product.description || ""
+          )}
         </p>
 
         <dl>
-
           <div>
             <dt>
               Medidas / tallas
             </dt>
 
             <dd>
-              ${product.medidas}
+              ${escapeHTML(product.medidas)}
             </dd>
           </div>
 
@@ -995,17 +1174,15 @@
             </dt>
 
             <dd>
-              ${product.material}
+              ${escapeHTML(product.material)}
             </dd>
           </div>
-
         </dl>
 
         ${variantSelectorHTML}
         ${purchaseButtonHTML}
 
         <div class="modal-actions">
-
           <a
             class="btn btn-outline"
             href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
@@ -1025,17 +1202,17 @@
           >
             Cotizar envío para esta pieza →
           </button>
-
         </div>
-
       </div>
     `;
 
-    document
-      .getElementById(
+    const modalImgContainer =
+      document.getElementById(
         "modalImgContainer"
-      )
-      .addEventListener(
+      );
+
+    if (modalImgContainer) {
+      modalImgContainer.addEventListener(
         "click",
         () => {
           openZoom(
@@ -1044,6 +1221,7 @@
           );
         }
       );
+    }
 
     const addToCartButton =
       document.getElementById(
@@ -1103,10 +1281,19 @@
     document.body.style.overflow =
       "hidden";
 
-    modalClose.focus();
+    if (modalClose) {
+      modalClose.focus();
+    }
   }
 
   function closeModal() {
+    if (
+      !modal ||
+      !modalOverlay
+    ) {
+      return;
+    }
+
     modal.classList.remove(
       "open"
     );
@@ -1125,6 +1312,13 @@
   }
 
   function openShippingModal() {
+    if (
+      !shippingModal ||
+      !shippingOverlay
+    ) {
+      return;
+    }
+
     shippingModal.classList.add(
       "open"
     );
@@ -1141,10 +1335,24 @@
     document.body.style.overflow =
       "hidden";
 
-    shippingClose.focus();
+    const shippingName =
+      document.getElementById(
+        "shippingName"
+      );
+
+    if (shippingName) {
+      shippingName.focus();
+    }
   }
 
   function closeShippingModal() {
+    if (
+      !shippingModal ||
+      !shippingOverlay
+    ) {
+      return;
+    }
+
     shippingModal.classList.remove(
       "open"
     );
@@ -1160,34 +1368,6 @@
 
     document.body.style.overflow =
       "";
-  }
-
-  async function validatePostalCode(
-    postalCode
-  ) {
-    const response =
-      await fetch(
-        `${GEOCODES_ENDPOINT}/${encodeURIComponent(
-          postalCode
-        )}`
-      );
-
-    const data =
-      await response
-        .json()
-        .catch(() => ({}));
-
-    if (
-      !response.ok ||
-      !data?.success ||
-      !data?.data
-    ) {
-      throw new Error(
-        "No fue posible validar ese código postal."
-      );
-    }
-
-    return data.data;
   }
 
   function normalizePhone(phone) {
@@ -1210,16 +1390,29 @@
   }
 
   function renderShippingRates(rates) {
+    if (!shippingResults) {
+      return;
+    }
+
     shippingResults.innerHTML =
       rates.map((rate, index) => `
         <label
-          style="display:block; border:1px solid var(--border); padding:14px; margin-bottom:10px; cursor:pointer; background:white;"
+          style="
+            display:block;
+            border:1px solid var(--border);
+            padding:14px;
+            margin-bottom:10px;
+            cursor:pointer;
+            background:white;
+          "
         >
-
           <div
-            style="display:flex; gap:10px; align-items:flex-start;"
+            style="
+              display:flex;
+              gap:10px;
+              align-items:flex-start;
+            "
           >
-
             <input
               type="radio"
               name="shippingRate"
@@ -1228,37 +1421,51 @@
             >
 
             <span
-              style="display:block; flex:1;"
+              style="
+                display:block;
+                flex:1;
+              "
             >
-
               <strong
-                style="display:block; color:var(--ink);"
+                style="
+                  display:block;
+                  color:var(--ink);
+                "
               >
-                ${String(
-                  rate.carrier ||
-                  "Mensajería"
-                ).toUpperCase()}
+                ${escapeHTML(
+                  String(
+                    rate.carrier ||
+                    "Mensajería"
+                  ).toUpperCase()
+                )}
               </strong>
 
               <span
-                style="display:block; margin-top:3px;"
+                style="
+                  display:block;
+                  margin-top:3px;
+                "
               >
-                ${
+                ${escapeHTML(
                   rate.serviceDescription ||
                   rate.service ||
                   "Servicio"
-                }
+                )}
               </span>
 
               <span
-                style="display:block; color:var(--muted); font-size:12px; margin-top:3px;"
+                style="
+                  display:block;
+                  color:var(--muted);
+                  font-size:12px;
+                  margin-top:3px;
+                "
               >
-                ${
+                ${escapeHTML(
                   rate.deliveryEstimate ||
                   "Entrega por confirmar"
-                }
+                )}
               </span>
-
             </span>
 
             <strong>
@@ -1268,9 +1475,7 @@
                 )
               )}
             </strong>
-
           </div>
-
         </label>
       `).join("");
 
@@ -1286,6 +1491,10 @@
               rates[
                 Number(input.value)
               ];
+
+            if (!rate) {
+              return;
+            }
 
             selectedShipping = {
               carrier:
@@ -1315,8 +1524,10 @@
                 rate.currency || "MXN"
             };
 
-            shippingStatus.textContent =
-              "Opción de envío seleccionada. Ya puedes continuar al pago.";
+            if (shippingStatus) {
+              shippingStatus.textContent =
+                "Opción de envío seleccionada. Ya puedes continuar al pago.";
+            }
 
             updateCartDOM();
           }
@@ -1324,41 +1535,53 @@
       });
   }
 
-  document
-    .getElementById(
+  const openCartButton =
+    document.getElementById(
       "openCartBtn"
-    )
-    .addEventListener(
-      "click",
-      openCartDrawer
     );
 
-  document
-    .getElementById(
+  const openCartButtonMobile =
+    document.getElementById(
       "openCartBtnMobile"
-    )
-    .addEventListener(
+    );
+
+  const openShippingButtonHeader =
+    document.getElementById(
+      "openShippingBtnHeader"
+    );
+
+  const openShippingButtonNote =
+    document.getElementById(
+      "openShippingBtnNote"
+    );
+
+  if (openCartButton) {
+    openCartButton.addEventListener(
       "click",
       openCartDrawer
     );
+  }
 
-  document
-    .getElementById(
-      "openShippingBtnHeader"
-    )
-    .addEventListener(
+  if (openCartButtonMobile) {
+    openCartButtonMobile.addEventListener(
+      "click",
+      openCartDrawer
+    );
+  }
+
+  if (openShippingButtonHeader) {
+    openShippingButtonHeader.addEventListener(
       "click",
       openShippingModal
     );
+  }
 
-  document
-    .getElementById(
-      "openShippingBtnNote"
-    )
-    .addEventListener(
+  if (openShippingButtonNote) {
+    openShippingButtonNote.addEventListener(
       "click",
       openShippingModal
     );
+  }
 
   filterBtns.forEach(button => {
     button.addEventListener(
@@ -1383,252 +1606,308 @@
     );
   });
 
-  modalClose.addEventListener(
-    "click",
-    closeModal
-  );
+  if (modalClose) {
+    modalClose.addEventListener(
+      "click",
+      closeModal
+    );
+  }
 
-  modalOverlay.addEventListener(
-    "click",
-    closeModal
-  );
+  if (modalOverlay) {
+    modalOverlay.addEventListener(
+      "click",
+      closeModal
+    );
+  }
 
-  cartClose.addEventListener(
-    "click",
-    closeCartDrawer
-  );
+  if (cartClose) {
+    cartClose.addEventListener(
+      "click",
+      closeCartDrawer
+    );
+  }
 
-  cartOverlay.addEventListener(
-    "click",
-    closeCartDrawer
-  );
+  if (cartOverlay) {
+    cartOverlay.addEventListener(
+      "click",
+      closeCartDrawer
+    );
+  }
 
-  shippingClose.addEventListener(
-    "click",
-    closeShippingModal
-  );
+  if (shippingClose) {
+    shippingClose.addEventListener(
+      "click",
+      closeShippingModal
+    );
+  }
 
-  shippingOverlay.addEventListener(
-    "click",
-    closeShippingModal
-  );
+  if (shippingOverlay) {
+    shippingOverlay.addEventListener(
+      "click",
+      closeShippingModal
+    );
+  }
 
-  zoomClose.addEventListener(
-    "click",
-    closeZoom
-  );
+  if (zoomClose) {
+    zoomClose.addEventListener(
+      "click",
+      closeZoom
+    );
+  }
 
-  zoomOverlay.addEventListener(
-    "click",
-    closeZoom
-  );
+  if (zoomOverlay) {
+    zoomOverlay.addEventListener(
+      "click",
+      closeZoom
+    );
+  }
 
-  zoomImage.addEventListener(
-    "click",
-    closeZoom
-  );
+  if (zoomImage) {
+    zoomImage.addEventListener(
+      "click",
+      closeZoom
+    );
+  }
 
-  checkoutBtn.addEventListener(
-    "click",
-    checkoutWithStripe
-  );
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener(
+      "click",
+      checkoutWithStripe
+    );
+  }
 
-  shippingForm.addEventListener(
-    "submit",
-    async event => {
-      event.preventDefault();
+  if (shippingForm) {
+    shippingForm.addEventListener(
+      "submit",
+      async event => {
+        event.preventDefault();
 
-      const postalCode =
-        document
-          .getElementById(
+        const nameInput =
+          document.getElementById(
+            "shippingName"
+          );
+
+        const phoneInput =
+          document.getElementById(
+            "shippingPhone"
+          );
+
+        const emailInput =
+          document.getElementById(
+            "shippingEmail"
+          );
+
+        const streetInput =
+          document.getElementById(
+            "shippingStreet"
+          );
+
+        const numberInput =
+          document.getElementById(
+            "shippingNumber"
+          );
+
+        const districtInput =
+          document.getElementById(
+            "shippingDistrict"
+          );
+
+        const postalCodeInput =
+          document.getElementById(
             "shippingCP"
-          )
-          .value
-          .trim();
+          );
 
-      const cityInput =
-        document.getElementById(
-          "shippingCity"
-        );
+        const cityInput =
+          document.getElementById(
+            "shippingCity"
+          );
 
-      if (
-        !/^\d{5}$/.test(
-          postalCode
-        )
-      ) {
-        shippingStatus.textContent =
-          "Escribe un código postal mexicano de cinco dígitos.";
+        const postalCode =
+          postalCodeInput
+            ? postalCodeInput.value.trim()
+            : "";
 
-        return;
-      }
-
-      shippingSubmit.disabled =
-        true;
-
-      shippingSubmit.textContent =
-        "Calculando…";
-
-      shippingStatus.textContent =
-        "Validando dirección y consultando mensajerías…";
-
-      shippingResults.innerHTML =
-        "";
-
-      selectedShipping =
-        null;
-
-      try {
-        const location =
-          await validatePostalCode(
+        if (
+          !/^\d{5}$/.test(
             postalCode
-          );
+          )
+        ) {
+          shippingStatus.textContent =
+            "Escribe un código postal mexicano de cinco dígitos.";
 
-        cityInput.value =
-          location.city ||
-          cityInput.value.trim();
-
-        const destination = {
-          name:
-            document
-              .getElementById(
-                "shippingName"
-              )
-              .value
-              .trim(),
-
-          phone:
-            normalizePhone(
-              document
-                .getElementById(
-                  "shippingPhone"
-                )
-                .value
-            ),
-
-          email:
-            document
-              .getElementById(
-                "shippingEmail"
-              )
-              .value
-              .trim(),
-
-          street:
-            `${document
-              .getElementById(
-                "shippingStreet"
-              )
-              .value
-              .trim()} ${document
-              .getElementById(
-                "shippingNumber"
-              )
-              .value
-              .trim()}`,
-
-          district:
-            document
-              .getElementById(
-                "shippingDistrict"
-              )
-              .value
-              .trim(),
-
-          city:
-            location.city ||
-            cityInput.value.trim(),
-
-          state:
-            location.state,
-
-          country:
-            "MX",
-
-          postalCode
-        };
-
-        const response =
-          await fetch(
-            SHIPPING_RATES_ENDPOINT,
-            {
-              method: "POST",
-
-              headers: {
-                "Content-Type":
-                  "application/json"
-              },
-
-              body: JSON.stringify({
-                destination
-              })
-            }
-          );
-
-        const data =
-          await response
-            .json()
-            .catch(() => ({}));
-
-        if (!response.ok) {
-          const carrierDetails =
-            Array.isArray(
-              data.details
-            )
-              ? data.details
-                  .map(
-                    item =>
-                      `${item.carrier}: ${item.message}`
-                  )
-                  .join(" · ")
-              : "";
-
-          throw new Error(
-            [
-              data.error ||
-              "No fue posible obtener tarifas para ese destino.",
-
-              carrierDetails
-            ]
-              .filter(Boolean)
-              .join(" ")
-          );
+          return;
         }
 
         if (
-          !Array.isArray(
-            data.rates
-          ) ||
-          data.rates.length === 0
+          !nameInput?.value.trim() ||
+          !phoneInput?.value.trim() ||
+          !streetInput?.value.trim() ||
+          !numberInput?.value.trim() ||
+          !districtInput?.value.trim()
         ) {
-          throw new Error(
-            "No se encontraron opciones de envío para ese destino."
-          );
+          shippingStatus.textContent =
+            "Completa los datos obligatorios de la dirección.";
+
+          return;
         }
 
-        lastShippingDestination =
-          destination;
-
-        shippingStatus.textContent =
-          "Selecciona una opción de envío:";
-
-        renderShippingRates(
-          data.rates
-        );
-      } catch (error) {
-        console.error(error);
-
-        shippingStatus.textContent =
-          error.message ||
-          "No fue posible calcular el envío.";
-      } finally {
         shippingSubmit.disabled =
-          false;
+          true;
 
         shippingSubmit.textContent =
-          "Calcular envío";
+          "Calculando…";
+
+        shippingStatus.textContent =
+          "Validando dirección y consultando mensajerías…";
+
+        shippingResults.innerHTML =
+          "";
+
+        selectedShipping =
+          null;
+
+        lastShippingDestination =
+          null;
+
+        try {
+          const destination = {
+            name:
+              nameInput.value.trim(),
+
+            phone:
+              normalizePhone(
+                phoneInput.value
+              ),
+
+            email:
+              emailInput
+                ? emailInput.value.trim()
+                : "",
+
+            street:
+              `${streetInput.value.trim()} ${numberInput.value.trim()}`,
+
+            district:
+              districtInput.value.trim(),
+
+            city:
+              cityInput
+                ? cityInput.value.trim()
+                : "",
+
+            state:
+              "",
+
+            country:
+              "MX",
+
+            postalCode
+          };
+
+          const response =
+            await fetch(
+              SHIPPING_RATES_ENDPOINT,
+              {
+                method: "POST",
+
+                headers: {
+                  "Content-Type":
+                    "application/json"
+                },
+
+                body: JSON.stringify({
+                  destination
+                })
+              }
+            );
+
+          const data =
+            await response
+              .json()
+              .catch(() => ({}));
+
+          if (!response.ok) {
+            const carrierDetails =
+              Array.isArray(
+                data.details
+              )
+                ? data.details
+                    .map(
+                      item =>
+                        `${item.carrier}: ${item.message}`
+                    )
+                    .join(" · ")
+                : "";
+
+            throw new Error(
+              [
+                data.error ||
+                "No fue posible obtener tarifas para ese destino.",
+
+                carrierDetails
+              ]
+                .filter(Boolean)
+                .join(" ")
+            );
+          }
+
+          if (
+            !Array.isArray(
+              data.rates
+            ) ||
+            data.rates.length === 0
+          ) {
+            throw new Error(
+              "No se encontraron opciones de envío para ese destino."
+            );
+          }
+
+          if (
+            data.destination?.city &&
+            cityInput
+          ) {
+            cityInput.value =
+              data.destination.city;
+          }
+
+          lastShippingDestination = {
+            ...destination,
+
+            city:
+              data.destination?.city ||
+              destination.city,
+
+            state:
+              data.destination?.state ||
+              destination.state,
+
+            postalCode:
+              data.destination?.postalCode ||
+              destination.postalCode
+          };
+
+          shippingStatus.textContent =
+            "Selecciona una opción de envío:";
+
+          renderShippingRates(
+            data.rates
+          );
+        } catch (error) {
+          console.error(error);
+
+          shippingStatus.textContent =
+            error.message ||
+            "No fue posible calcular el envío.";
+        } finally {
+          shippingSubmit.disabled =
+            false;
+
+          shippingSubmit.textContent =
+            "Calcular envío";
+        }
       }
-    }
-  );
+    );
+  }
 
   document.addEventListener(
     "keydown",
