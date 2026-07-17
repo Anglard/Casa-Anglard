@@ -84,32 +84,28 @@ function validateDestination(destination) {
   );
 }
 
-async function getPostalCodeLocation(
-  postalCode
-) {
+async function getPostalCodeLocation(postalCode) {
   const url =
     `${ENVIA_GEOCODES_URL}/${encodeURIComponent(
       postalCode
     )}`;
 
-  const geocodeResponse =
-    await fetch(url, {
-      method: "GET",
-      headers: {
-        Accept: "application/json"
-      }
-    });
+  const geocodeResponse = await fetch(url, {
+    method: "GET",
+    headers: {
+      Accept: "application/json"
+    }
+  });
 
   const rawText =
     await geocodeResponse.text();
 
-  let parsedData = null;
+  let parsedData;
 
   try {
-    parsedData =
-      rawText
-        ? JSON.parse(rawText)
-        : null;
+    parsedData = rawText
+      ? JSON.parse(rawText)
+      : null;
   } catch {
     throw new Error(
       `Geocodes devolvió una respuesta no válida. Código HTTP: ${geocodeResponse.status}.`
@@ -117,80 +113,83 @@ async function getPostalCodeLocation(
   }
 
   if (!geocodeResponse.ok) {
-    const message =
-      parsedData?.message ||
-      parsedData?.error ||
-      `Geocodes respondió con código ${geocodeResponse.status}.`;
-
     throw new Error(
-      typeof message === "string"
-        ? message
-        : JSON.stringify(message)
+      `Geocodes respondió con código ${geocodeResponse.status}.`
     );
   }
 
   /*
-   * Envia documenta normalmente:
+   * La respuesta real de Envia tiene esta estructura:
    *
-   * {
-   *   success: true,
-   *   data: {
-   *     zipcode,
-   *     city,
-   *     state,
-   *     country
+   * [
+   *   {
+   *     "zip_code": "04490",
+   *     "country": {
+   *       "code": "MX"
+   *     },
+   *     "state": {
+   *       "code": {
+   *         "2digit": "CX",
+   *         "3digit": "CMX"
+   *       }
+   *     },
+   *     "locality": "Ciudad de México",
+   *     "regions": {
+   *       "region_2": "Coyoacán"
+   *     }
    *   }
-   * }
-   *
-   * También aceptamos una respuesta directa o un arreglo,
-   * para evitar que una pequeña variación rompa la integración.
+   * ]
    */
 
   let location = null;
 
   if (
-    parsedData &&
-    typeof parsedData.data === "object" &&
-    !Array.isArray(parsedData.data)
+    Array.isArray(parsedData) &&
+    parsedData.length > 0
   ) {
-    location =
-      parsedData.data;
+    location = parsedData[0];
   } else if (
     Array.isArray(parsedData?.data) &&
     parsedData.data.length > 0
   ) {
-    location =
-      parsedData.data[0];
+    location = parsedData.data[0];
+  } else if (
+    parsedData?.data &&
+    typeof parsedData.data === "object"
+  ) {
+    location = parsedData.data;
   } else if (
     parsedData &&
     typeof parsedData === "object"
   ) {
-    location =
-      parsedData;
+    location = parsedData;
   }
 
   if (!location) {
     throw new Error(
-      "Envia no devolvió información para ese código postal."
+      `Envia no devolvió información para el código postal ${postalCode}.`
     );
   }
 
   const city =
     normalizeText(
-      location.city ||
       location.locality ||
-      location.municipality
+      location.city ||
+      location.regions?.region_2
     );
 
   const state =
     normalizeText(
-      location.state ||
+      location.state?.code?.["2digit"] ||
+      location.state?.code?.["3digit"] ||
+      location.state?.iso_code ||
       location.stateCode ||
       location.state_code
     );
 
   const returnedPostalCode =
     normalizeText(
+      location.zip_code ||
       location.zipcode ||
       location.postalCode ||
       location.postal_code
@@ -198,20 +197,27 @@ async function getPostalCodeLocation(
 
   const country =
     normalizeText(
-      location.country ||
+      location.country?.code ||
       location.countryCode ||
-      location.country_code
+      location.country_code ||
+      location.country
     ) || "MX";
+
+  const municipality =
+    normalizeText(
+      location.regions?.region_2 ||
+      location.municipality
+    );
 
   if (!city) {
     throw new Error(
-      `Envia validó el código postal ${postalCode}, pero no devolvió la ciudad.`
+      `Envia validó el código postal ${postalCode}, pero no devolvió la localidad.`
     );
   }
 
   if (!state) {
     throw new Error(
-      `Envia validó el código postal ${postalCode}, pero no devolvió el estado.`
+      `Envia validó el código postal ${postalCode}, pero no devolvió el código del estado.`
     );
   }
 
@@ -220,7 +226,8 @@ async function getPostalCodeLocation(
     state,
     country,
     postalCode:
-      returnedPostalCode
+      returnedPostalCode,
+    municipality
   };
 }
 
@@ -392,10 +399,9 @@ async function requestCarrierRate({
   let data = null;
 
   try {
-    data =
-      rawText
-        ? JSON.parse(rawText)
-        : null;
+    data = rawText
+      ? JSON.parse(rawText)
+      : null;
   } catch {
     throw new Error(
       `${carrier}: Envia devolvió una respuesta no válida. Código HTTP: ${rateResponse.status}.`
@@ -580,20 +586,18 @@ export default async function handler(
           result.status ===
           "fulfilled"
         ) {
-          result.value.forEach(
-            rate => {
-              const normalizedRate =
-                normalizeRate(rate);
+          result.value.forEach(rate => {
+            const normalizedRate =
+              normalizeRate(rate);
 
-              if (
-                normalizedRate.totalPrice > 0
-              ) {
-                rates.push(
-                  normalizedRate
-                );
-              }
+            if (
+              normalizedRate.totalPrice > 0
+            ) {
+              rates.push(
+                normalizedRate
+              );
             }
-          );
+          });
         } else {
           errors.push({
             carrier,
@@ -633,7 +637,10 @@ export default async function handler(
               normalizedDestination.state,
 
             postalCode:
-              normalizedDestination.postalCode
+              normalizedDestination.postalCode,
+
+            municipality:
+              location.municipality
           }
         });
     }
@@ -660,7 +667,10 @@ export default async function handler(
             normalizedDestination.state,
 
           postalCode:
-            normalizedDestination.postalCode
+            normalizedDestination.postalCode,
+
+          municipality:
+            location.municipality
         },
 
         package:
