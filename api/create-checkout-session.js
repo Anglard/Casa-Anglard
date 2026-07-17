@@ -3,12 +3,39 @@
 
 import Stripe from "stripe";
 
-const stripe = new Stripe(
-  process.env.STRIPE_SECRET_KEY
-);
+const STRIPE_SECRET_KEY =
+  process.env.STRIPE_SECRET_KEY;
 
-// Catálogo validado en el servidor.
-// Nunca usamos los precios enviados desde el navegador.
+const stripe = STRIPE_SECRET_KEY
+  ? new Stripe(STRIPE_SECRET_KEY)
+  : null;
+
+/*
+ * Catálogo validado en el servidor.
+ *
+ * Los precios no se toman del navegador porque una persona podría
+ * modificarlos desde las herramientas de desarrollo.
+ */
+
+function createAromaVariants() {
+  return {
+    "10ml": {
+      name: "Gotero de 10 ml",
+      price: 250
+    },
+
+    "20ml": {
+      name: "Gotero de 20 ml",
+      price: 320
+    },
+
+    spray: {
+      name: "Spray ambiental",
+      price: 380
+    }
+  };
+}
+
 const SERVER_CATALOG = {
   poster: {
     name: "Póster de Exhibición",
@@ -199,25 +226,6 @@ const SERVER_CATALOG = {
   }
 };
 
-function createAromaVariants() {
-  return {
-    "10ml": {
-      name: "Gotero de 10 ml",
-      price: 250
-    },
-
-    "20ml": {
-      name: "Gotero de 20 ml",
-      price: 320
-    },
-
-    spray: {
-      name: "Spray ambiental",
-      price: 380
-    }
-  };
-}
-
 function normalizeText(value) {
   return typeof value === "string"
     ? value.trim()
@@ -225,7 +233,8 @@ function normalizeText(value) {
 }
 
 function normalizeQuantity(value) {
-  const quantity = Number(value);
+  const quantity =
+    Number(value);
 
   if (
     !Number.isInteger(quantity) ||
@@ -233,11 +242,21 @@ function normalizeQuantity(value) {
     quantity > 20
   ) {
     throw new Error(
-      "La cantidad de un producto no es válida."
+      "La cantidad de uno de los productos no es válida."
     );
   }
 
   return quantity;
+}
+
+function parseRequestBody(request) {
+  if (
+    typeof request.body === "string"
+  ) {
+    return JSON.parse(request.body);
+  }
+
+  return request.body || {};
 }
 
 function getValidatedCatalogItem(item) {
@@ -252,7 +271,7 @@ function getValidatedCatalogItem(item) {
 
   if (!product) {
     throw new Error(
-      `El producto ${productId || "desconocido"} no existe.`
+      `El producto ${productId || "desconocido"} no existe en el catálogo.`
     );
   }
 
@@ -265,7 +284,19 @@ function getValidatedCatalogItem(item) {
 
     if (!variant) {
       throw new Error(
-        `La presentación elegida para ${product.name} no es válida.`
+        `La presentación seleccionada para ${product.name} no es válida.`
+      );
+    }
+
+    const variantPrice =
+      Number(variant.price);
+
+    if (
+      !Number.isFinite(variantPrice) ||
+      variantPrice <= 0
+    ) {
+      throw new Error(
+        `El precio de ${product.name} no es válido.`
       );
     }
 
@@ -273,18 +304,23 @@ function getValidatedCatalogItem(item) {
       productId,
       variantId,
       quantity,
+
       name:
         `${product.name} — ${variant.name}`,
+
       unitAmount:
         Math.round(
-          Number(variant.price) * 100
+          variantPrice * 100
         )
     };
   }
 
+  const productPrice =
+    Number(product.price);
+
   if (
-    typeof product.price !== "number" ||
-    product.price <= 0
+    !Number.isFinite(productPrice) ||
+    productPrice <= 0
   ) {
     throw new Error(
       `${product.name} requiere cotización y no puede pagarse directamente.`
@@ -295,11 +331,13 @@ function getValidatedCatalogItem(item) {
     productId,
     variantId: null,
     quantity,
+
     name:
       product.name,
+
     unitAmount:
       Math.round(
-        Number(product.price) * 100
+        productPrice * 100
       )
   };
 }
@@ -326,6 +364,51 @@ function getRequestOrigin(request) {
   return `${protocol}://${host}`;
 }
 
+function validateDestination(destination) {
+  if (
+    !destination ||
+    typeof destination !== "object"
+  ) {
+    throw new Error(
+      "No se recibió la dirección de entrega."
+    );
+  }
+
+  const requiredFields = [
+    "name",
+    "phone",
+    "street",
+    "district",
+    "postalCode"
+  ];
+
+  for (
+    const field of requiredFields
+  ) {
+    if (
+      !normalizeText(
+        destination[field]
+      )
+    ) {
+      throw new Error(
+        "La dirección de entrega está incompleta."
+      );
+    }
+  }
+
+  if (
+    !/^[0-9]{5}$/.test(
+      normalizeText(
+        destination.postalCode
+      )
+    )
+  ) {
+    throw new Error(
+      "El código postal de entrega no es válido."
+    );
+  }
+}
+
 async function recalculateShipping({
   request,
   shipping
@@ -333,22 +416,23 @@ async function recalculateShipping({
   const destination =
     shipping?.destination;
 
-  const carrier =
+  validateDestination(
+    destination
+  );
+
+  const selectedCarrier =
     normalizeText(
       shipping?.carrier
     ).toLowerCase();
 
-  const service =
+  const selectedService =
     normalizeText(
       shipping?.service
     );
 
-  if (
-    !destination ||
-    !carrier
-  ) {
+  if (!selectedCarrier) {
     throw new Error(
-      "Primero debes calcular y seleccionar una opción de envío."
+      "Primero debes seleccionar una opción de envío."
     );
   }
 
@@ -363,6 +447,9 @@ async function recalculateShipping({
 
         headers: {
           "Content-Type":
+            "application/json",
+
+          Accept:
             "application/json"
         },
 
@@ -372,48 +459,80 @@ async function recalculateShipping({
       }
     );
 
-  const rateData =
-    await rateResponse
-      .json()
-      .catch(() => ({}));
+  const rawResponse =
+    await rateResponse.text();
+
+  let rateData = {};
+
+  try {
+    rateData = rawResponse
+      ? JSON.parse(rawResponse)
+      : {};
+  } catch {
+    throw new Error(
+      "El cotizador devolvió una respuesta inválida."
+    );
+  }
 
   if (!rateResponse.ok) {
+    const details =
+      Array.isArray(
+        rateData.details
+      )
+        ? rateData.details
+            .map(item => {
+              return `${item.carrier}: ${item.message}`;
+            })
+            .join(" · ")
+        : "";
+
     throw new Error(
-      rateData.error ||
-      "No fue posible volver a validar el envío."
+      [
+        rateData.error ||
+          "No fue posible validar nuevamente la tarifa de envío.",
+
+        details
+      ]
+        .filter(Boolean)
+        .join(" ")
     );
   }
 
   if (
-    !Array.isArray(rateData.rates) ||
+    !Array.isArray(
+      rateData.rates
+    ) ||
     rateData.rates.length === 0
   ) {
     throw new Error(
-      "No se encontró una tarifa vigente para el envío."
+      "No se encontraron tarifas vigentes para el destino."
     );
   }
 
   let validatedRate =
     rateData.rates.find(rate => {
-      const rateCarrier =
+      const carrier =
         normalizeText(
           rate.carrier
         ).toLowerCase();
 
-      const rateService =
+      const service =
         normalizeText(
           rate.service
         );
 
       return (
-        rateCarrier === carrier &&
-        rateService === service
+        carrier === selectedCarrier &&
+        service === selectedService
       );
     });
 
-  // Algunas mensajerías no devuelven siempre el mismo
-  // identificador de servicio. Como respaldo buscamos
-  // la tarifa más económica del transportista elegido.
+  /*
+   * Respaldo:
+   * si Envia modifica el identificador del servicio,
+   * buscamos la tarifa más económica del mismo transportista.
+   */
+
   if (!validatedRate) {
     validatedRate =
       rateData.rates
@@ -421,20 +540,30 @@ async function recalculateShipping({
           return (
             normalizeText(
               rate.carrier
-            ).toLowerCase() === carrier
+            ).toLowerCase() ===
+            selectedCarrier
           );
         })
-        .sort((firstRate, secondRate) => {
-          return (
-            Number(firstRate.totalPrice) -
-            Number(secondRate.totalPrice)
-          );
-        })[0];
+        .sort(
+          (
+            firstRate,
+            secondRate
+          ) => {
+            return (
+              Number(
+                firstRate.totalPrice
+              ) -
+              Number(
+                secondRate.totalPrice
+              )
+            );
+          }
+        )[0];
   }
 
   if (!validatedRate) {
     throw new Error(
-      "La tarifa seleccionada ya no está disponible. Vuelve a cotizar el envío."
+      "La tarifa seleccionada ya no está disponible. Vuelve a calcular el envío."
     );
   }
 
@@ -448,15 +577,48 @@ async function recalculateShipping({
     totalPrice <= 0
   ) {
     throw new Error(
-      "Envia devolvió un precio de envío inválido."
+      "El cotizador devolvió un precio de envío inválido."
     );
   }
+
+  const validatedDestination = {
+    ...destination,
+
+    city:
+      normalizeText(
+        rateData.destination?.city
+      ) ||
+      normalizeText(
+        destination.city
+      ),
+
+    state:
+      normalizeText(
+        rateData.destination?.state
+      ) ||
+      normalizeText(
+        destination.state
+      ),
+
+    postalCode:
+      normalizeText(
+        rateData.destination
+          ?.postalCode
+      ) ||
+      normalizeText(
+        destination.postalCode
+      ),
+
+    country:
+      "MX"
+  };
 
   return {
     carrier:
       normalizeText(
         validatedRate.carrier
-      ) || carrier,
+      ) ||
+      selectedCarrier,
 
     service:
       normalizeText(
@@ -465,7 +627,8 @@ async function recalculateShipping({
 
     serviceDescription:
       normalizeText(
-        validatedRate.serviceDescription
+        validatedRate
+          .serviceDescription
       ) ||
       normalizeText(
         validatedRate.service
@@ -474,20 +637,25 @@ async function recalculateShipping({
 
     deliveryEstimate:
       normalizeText(
-        validatedRate.deliveryEstimate
+        validatedRate
+          .deliveryEstimate
       ) ||
       "Entrega por confirmar",
+
+    deliveryDate:
+      validatedRate.deliveryDate ||
+      null,
 
     totalPrice,
 
     currency:
       normalizeText(
         validatedRate.currency
-      ) || "MXN",
+      ) ||
+      "MXN",
 
     destination:
-      rateData.destination ||
-      destination
+      validatedDestination
   };
 }
 
@@ -522,6 +690,12 @@ function createProductLineItem(item) {
 function createShippingLineItem(
   validatedShipping
 ) {
+  const carrierName =
+    validatedShipping.carrier
+      ? validatedShipping.carrier
+          .toUpperCase()
+      : "Mensajería";
+
   return {
     quantity: 1,
 
@@ -531,29 +705,84 @@ function createShippingLineItem(
 
       unit_amount:
         Math.round(
-          validatedShipping.totalPrice *
-          100
+          validatedShipping
+            .totalPrice * 100
         ),
 
       product_data: {
         name:
-          `Envío — ${validatedShipping.carrier.toUpperCase()}`,
+          `Envío — ${carrierName}`,
 
         description:
-          `${validatedShipping.serviceDescription}. ${validatedShipping.deliveryEstimate}`,
+          [
+            validatedShipping
+              .serviceDescription,
+
+            validatedShipping
+              .deliveryEstimate
+          ]
+            .filter(Boolean)
+            .join(" · "),
 
         metadata: {
           type:
             "shipping",
 
           carrier:
-            validatedShipping.carrier,
+            validatedShipping
+              .carrier,
 
           service:
-            validatedShipping.service || ""
+            validatedShipping
+              .service || ""
         }
       }
     }
+  };
+}
+
+function createOrderMetadata({
+  validatedShipping,
+  destination
+}) {
+  return {
+    store:
+      "Casa Anglard",
+
+    shipping_carrier:
+      normalizeText(
+        validatedShipping.carrier
+      ),
+
+    shipping_service:
+      normalizeText(
+        validatedShipping.service
+      ),
+
+    shipping_postal_code:
+      normalizeText(
+        destination.postalCode
+      ),
+
+    shipping_city:
+      normalizeText(
+        destination.city
+      ).slice(0, 500),
+
+    shipping_state:
+      normalizeText(
+        destination.state
+      ).slice(0, 500),
+
+    customer_name:
+      normalizeText(
+        destination.name
+      ).slice(0, 500),
+
+    customer_phone:
+      normalizeText(
+        destination.phone
+      ).slice(0, 500)
   };
 }
 
@@ -566,7 +795,9 @@ export default async function handler(
     "no-store, max-age=0"
   );
 
-  if (request.method !== "POST") {
+  if (
+    request.method !== "POST"
+  ) {
     response.setHeader(
       "Allow",
       "POST"
@@ -580,7 +811,7 @@ export default async function handler(
       });
   }
 
-  if (!process.env.STRIPE_SECRET_KEY) {
+  if (!STRIPE_SECRET_KEY) {
     return response
       .status(500)
       .json({
@@ -589,11 +820,20 @@ export default async function handler(
       });
   }
 
+  if (!stripe) {
+    return response
+      .status(500)
+      .json({
+        error:
+          "Stripe no pudo inicializarse."
+      });
+  }
+
   try {
     const body =
-      typeof request.body === "string"
-        ? JSON.parse(request.body)
-        : request.body || {};
+      parseRequestBody(
+        request
+      );
 
     const items =
       body.items;
@@ -615,7 +855,7 @@ export default async function handler(
         .status(400)
         .json({
           error:
-            "La bolsa contiene demasiados artículos diferentes."
+            "La bolsa contiene demasiados productos diferentes."
         });
     }
 
@@ -627,9 +867,13 @@ export default async function handler(
     const validatedShipping =
       await recalculateShipping({
         request,
+
         shipping:
           body.shipping
       });
+
+    const destination =
+      validatedShipping.destination;
 
     const productLineItems =
       validatedItems.map(
@@ -642,83 +886,70 @@ export default async function handler(
       );
 
     const origin =
-      getRequestOrigin(request);
+      getRequestOrigin(
+        request
+      );
 
     const customerEmail =
       normalizeText(
-        body.shipping?.destination?.email
+        destination.email
       );
 
-    const session =
-      await stripe.checkout.sessions.create({
-        mode:
-          "payment",
-
-        line_items: [
-          ...productLineItems,
-          shippingLineItem
-        ],
-
-        success_url:
-          `${origin}/?pago=exitoso&session_id={CHECKOUT_SESSION_ID}`,
-
-        cancel_url:
-          `${origin}/?pago=cancelado`,
-
-        locale:
-          "es",
-
-        customer_email:
-          customerEmail || undefined,
-
-        billing_address_collection:
-          "auto",
-
-        shipping_address_collection: {
-          allowed_countries: [
-            "MX"
-          ]
-        },
-
-        phone_number_collection: {
-          enabled:
-            true
-        },
-
-        allow_promotion_codes:
-          false,
-
-        metadata: {
-          store:
-            "Casa Anglard",
-
-          shipping_carrier:
-            validatedShipping.carrier,
-
-          shipping_service:
-            validatedShipping.service || "",
-
-          shipping_postal_code:
-            normalizeText(
-              body.shipping
-                ?.destination
-                ?.postalCode
-            )
-        },
-
-        payment_intent_data: {
-          metadata: {
-            store:
-              "Casa Anglard",
-
-            shipping_carrier:
-              validatedShipping.carrier,
-
-            shipping_service:
-              validatedShipping.service || ""
-          }
-        }
+    const metadata =
+      createOrderMetadata({
+        validatedShipping,
+        destination
       });
+
+    const session =
+      await stripe
+        .checkout
+        .sessions
+        .create({
+          mode:
+            "payment",
+
+          line_items: [
+            ...productLineItems,
+            shippingLineItem
+          ],
+
+          success_url:
+            `${origin}/?pago=exitoso&session_id={CHECKOUT_SESSION_ID}`,
+
+          cancel_url:
+            `${origin}/?pago=cancelado`,
+
+          locale:
+            "es",
+
+          customer_email:
+            customerEmail ||
+            undefined,
+
+          billing_address_collection:
+            "auto",
+
+          shipping_address_collection: {
+            allowed_countries: [
+              "MX"
+            ]
+          },
+
+          phone_number_collection: {
+            enabled:
+              true
+          },
+
+          allow_promotion_codes:
+            false,
+
+          metadata,
+
+          payment_intent_data: {
+            metadata
+          }
+        });
 
     if (!session.url) {
       throw new Error(
@@ -741,12 +972,25 @@ export default async function handler(
       error
     );
 
-    const message =
+    let message =
+      error?.message ||
+      "No fue posible iniciar el pago.";
+
+    if (
       error?.type ===
       "StripeAuthenticationError"
-        ? "Stripe rechazó la clave secreta configurada."
-        : error?.message ||
-          "No fue posible iniciar el pago.";
+    ) {
+      message =
+        "Stripe rechazó la clave secreta configurada en Vercel.";
+    }
+
+    if (
+      error?.type ===
+      "StripeInvalidRequestError"
+    ) {
+      message =
+        `Stripe rechazó la solicitud: ${error.message}`;
+    }
 
     return response
       .status(500)
