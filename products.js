@@ -240,33 +240,95 @@ const PRODUCTS = [
   },
 
   ...[
-    ["patchouli", "Patchouli"],
-    ["flor-naranjo", "Flor de Naranjo"],
-    ["mandarina", "Mandarina"],
-    ["sandalo", "Sándalo"],
-    ["mix-18", "Mix de 18 Elementos"],
-    ["arbol-te", "Árbol de Té"],
-    ["bergamota", "Bergamota"],
-    ["toronja-rosa", "Toronja Rosa"],
-    ["geranio", "Geranio"],
-    ["menta", "Menta"],
-    ["eucalipto", "Eucalipto"],
-    ["romero", "Romero"],
-    ["lavanda", "Lavanda"],
-    ["eucalipto-dulce", "Eucalipto Dulce"],
-    ["limon", "Limón"]
-  ].map(([id, aromaName], index) => ({
-    id,
+    {
+      id: "patchouli",
+      aromaName: "Patchouli",
+      imageFile: "patchouli.png"
+    },
+    {
+      id: "flor-naranjo",
+      aromaName: "Flor de Naranjo",
+      imageFile: "flor-de-naranjo.png"
+    },
+    {
+      id: "mandarina",
+      aromaName: "Mandarina",
+      imageFile: "mandarina.png"
+    },
+    {
+      id: "sandalo",
+      aromaName: "Sándalo",
+      imageFile: "sandalo.png"
+    },
+    {
+      id: "mix-18",
+      aromaName: "Mix de 18 Elementos",
+      imageFile: "mix-de-18-elementos.png"
+    },
+    {
+      id: "arbol-te",
+      aromaName: "Árbol de Té",
+      imageFile: "arbol-de-te.png"
+    },
+    {
+      id: "bergamota",
+      aromaName: "Bergamota",
+      imageFile: "bergamota.png"
+    },
+    {
+      id: "toronja-rosa",
+      aromaName: "Toronja Rosa",
+      imageFile: "toronja-rosa.png"
+    },
+    {
+      id: "geranio",
+      aromaName: "Geranio",
+      imageFile: "geranio.png"
+    },
+    {
+      id: "menta",
+      aromaName: "Menta",
+      imageFile: "menta.png"
+    },
+    {
+      id: "eucalipto",
+      aromaName: "Eucalipto",
+      imageFile: "eucalipto.png"
+    },
+    {
+      id: "romero",
+      aromaName: "Romero",
+      imageFile: "romero.png"
+    },
+    {
+      id: "lavanda",
+      aromaName: "Lavanda",
+      imageFile: "lavanda.png"
+    },
+    {
+      id: "eucalipto-dulce",
+      aromaName: "Eucalipto Dulce",
+      imageFile: "eucalipto-dulce.png"
+    },
+    {
+      id: "limon",
+      aromaName: "Limón",
+      imageFile: "limon.png"
+    }
+  ].map((aroma, index) => ({
+    id: aroma.id,
     sku: `CA-ARO-${String(index + 1).padStart(3, "0")}`,
-    name: `Aroma de ${aromaName}`,
+    name: `Aroma de ${aroma.aromaName}`,
     category: "aromas",
     categoryLabel: "Aromas",
     medidas: "10 ml / 20 ml / Spray",
     material: "Preparación aromática",
-    description: `Producto aromático de ${aromaName} disponible en tres presentaciones.`,
+    description:
+      `Producto aromático de ${aroma.aromaName} ` +
+      "disponible en tres presentaciones.",
     variants: AROMA_VARIANTS.map(variant => ({
       ...variant
     })),
-    img: `images/${id}.jpg`
+    img: `images/${aroma.imageFile}`
   }))
 ];
