@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html lang="es-MX">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Casa Anglard — Objetos, libros y aromas con intención</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Casa Anglard — Objetos, libros y aromas con intención
+  </title>
 
   <meta
     name="description"
     content="Casa Anglard reúne arte impreso, textiles, accesorios y productos aromáticos seleccionados para acompañar tus espacios cotidianos."
   >
 
-  <link rel="canonical" href="https://www.casa-anglard.com/">
+  <link
+    rel="canonical"
+    href="https://www.casa-anglard.com/"
+  >
 
   <link
     rel="icon"
@@ -19,7 +29,10 @@
     type="image/png"
   >
 
-  <meta property="og:title" content="Casa Anglard">
+  <meta
+    property="og:title"
+    content="Casa Anglard"
+  >
 
   <meta
     property="og:description"
@@ -36,7 +49,10 @@
     content="https://www.casa-anglard.com/"
   >
 
-  <meta property="og:type" content="website">
+  <meta
+    property="og:type"
+    content="website"
+  >
 
   <link
     rel="preconnect"
@@ -54,7 +70,10 @@
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="styles.css">
+  <link
+    rel="stylesheet"
+    href="styles.css"
+  >
 </head>
 
 <body>
@@ -75,7 +94,10 @@
         <img
           src="images/casa-anglard.jpg.png"
           alt="Casa Anglard"
-          style="height: clamp(40px, 5vw, 60px); width: auto;"
+          style="
+            height:clamp(40px, 5vw, 60px);
+            width:auto;
+          "
         >
       </a>
 
@@ -104,7 +126,11 @@
           type="button"
           class="link-btn"
           id="openCartBtn"
-          style="margin-left: 14px; font-weight: 600; color: var(--teal);"
+          style="
+            margin-left:14px;
+            font-weight:600;
+            color:var(--teal);
+          "
         >
           Mi Bolsa
           (<span id="cartCountGlobal">0</span>)
@@ -113,7 +139,11 @@
       </nav>
 
       <div
-        style="display: flex; align-items: center; gap: 12px;"
+        style="
+          display:flex;
+          align-items:center;
+          gap:12px;
+        "
       >
 
         <button
@@ -418,7 +448,7 @@
         <div class="contact-links">
 
           <a
-            href="https://wa.me/525637091144"
+            href="https://wa.me/525662692923"
             target="_blank"
             rel="noopener"
             class="btn btn-dark"
@@ -434,7 +464,7 @@
           </a>
 
           <a
-            href="https://instagram.com/casaanglard"
+            href="https://www.instagram.com/casaanglard/"
             target="_blank"
             rel="noopener"
             class="btn btn-outline-light"
@@ -458,13 +488,16 @@
 
         <div
           class="footer-logo"
-          style="margin-bottom: 12px;"
+          style="margin-bottom:12px;"
         >
 
           <img
             src="images/casa-anglard.jpg.png"
             alt="Casa Anglard"
-            style="height: 45px; width: auto;"
+            style="
+              height:45px;
+              width:auto;
+            "
           >
 
         </div>
@@ -497,17 +530,25 @@
 
       <div class="footer-col">
 
-        <span>
-          WhatsApp: 56 3709 1144
-        </span>
+        <a
+          href="https://wa.me/525662692923"
+          target="_blank"
+          rel="noopener"
+        >
+          WhatsApp: 56 6269 2923
+        </a>
 
-        <span>
+        <a href="mailto:casaanglard@gmail.com">
           casaanglard@gmail.com
-        </span>
+        </a>
 
-        <span>
+        <a
+          href="https://www.instagram.com/casaanglard/"
+          target="_blank"
+          rel="noopener"
+        >
           @casaanglard
-        </span>
+        </a>
 
       </div>
 
@@ -519,6 +560,8 @@
     </div>
 
   </footer>
+
+  <!-- Modal del producto -->
 
   <div
     class="modal-overlay"
@@ -549,6 +592,8 @@
     ></div>
 
   </div>
+
+  <!-- Cotizador de envío -->
 
   <div
     class="modal-overlay"
@@ -708,12 +753,12 @@
           class="shipping-copy"
           role="status"
           aria-live="polite"
-          style="margin-top: 16px;"
+          style="margin-top:16px;"
         ></div>
 
         <div
           id="shippingResults"
-          style="margin-top: 14px;"
+          style="margin-top:14px;"
         ></div>
 
         <p class="shipping-disclaimer">
@@ -725,6 +770,8 @@
     </div>
 
   </div>
+
+  <!-- Bolsa de compra -->
 
   <div
     class="modal-overlay"
@@ -738,7 +785,15 @@
     aria-modal="true"
     aria-hidden="true"
     aria-labelledby="cartTitle"
-    style="right: 0; left: auto; transform: translate(100%, -50%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);"
+    style="
+      right:0;
+      left:auto;
+      transform:translate(100%, -50%);
+      transition:
+        transform
+        0.3s
+        cubic-bezier(0.16, 1, 0.3, 1);
+    "
   >
 
     <button
@@ -762,19 +817,36 @@
 
       <div
         id="cartItemsList"
-        style="margin: 20px 0; max-height: 40vh; overflow-y: auto; border-bottom: 1px solid var(--border); padding-bottom: 10px;"
+        style="
+          margin:20px 0;
+          max-height:40vh;
+          overflow-y:auto;
+          border-bottom:
+            1px solid
+            var(--border);
+          padding-bottom:10px;
+        "
       ></div>
 
       <div
         id="selectedShippingSummary"
         class="shipping-copy"
-        style="font-size: 12px; margin-bottom: 20px;"
+        style="
+          font-size:12px;
+          margin-bottom:20px;
+        "
       >
         Aún no has seleccionado una opción de envío.
       </div>
 
       <div
-        style="margin: 16px 0; display: flex; justify-content: space-between; font-weight: 700; font-size: 16px;"
+        style="
+          margin:16px 0;
+          display:flex;
+          justify-content:space-between;
+          font-weight:700;
+          font-size:16px;
+        "
       >
 
         <span>
@@ -791,14 +863,17 @@
         type="button"
         class="btn btn-dark"
         id="checkoutBtn"
-        style="width: 100%;"
+        style="width:100%;"
       >
         Pagar de forma segura con Stripe
       </button>
 
       <p
         class="shipping-disclaimer"
-        style="text-align: center; margin-top: 12px;"
+        style="
+          text-align:center;
+          margin-top:12px;
+        "
       >
         El pago se procesa en la página segura de Stripe.
       </p>
@@ -807,10 +882,15 @@
 
   </div>
 
+  <!-- Ampliación de imágenes -->
+
   <div
     class="modal-overlay"
     id="zoomOverlay"
-    style="z-index: 70; background: rgba(0,0,0,0.85);"
+    style="
+      z-index:70;
+      background:rgba(0, 0, 0, 0.85);
+    "
   ></div>
 
   <div
@@ -819,7 +899,16 @@
     aria-modal="true"
     aria-hidden="true"
     aria-label="Imagen ampliada"
-    style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 71; max-width: 90vw; max-height: 90vh;"
+    style="
+      display:none;
+      position:fixed;
+      top:50%;
+      left:50%;
+      transform:translate(-50%, -50%);
+      z-index:71;
+      max-width:90vw;
+      max-height:90vh;
+    "
   >
 
     <button
@@ -827,7 +916,12 @@
       class="modal-close"
       id="zoomClose"
       aria-label="Cerrar imagen ampliada"
-      style="color: white; right: -30px; top: -30px; font-size: 32px;"
+      style="
+        color:white;
+        right:-30px;
+        top:-30px;
+        font-size:32px;
+      "
     >
       ×
     </button>
@@ -836,7 +930,15 @@
       id="zoomImage"
       src=""
       alt="Imagen ampliada del producto"
-      style="max-width: 100%; max-height: 90vh; border-radius: 2px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); cursor: zoom-out;"
+      style="
+        max-width:100%;
+        max-height:90vh;
+        border-radius:2px;
+        box-shadow:
+          0 10px 40px
+          rgba(0, 0, 0, 0.5);
+        cursor:zoom-out;
+      "
     >
 
   </div>
@@ -845,4 +947,5 @@
   <script src="script.js"></script>
 
 </body>
+
 </html>
