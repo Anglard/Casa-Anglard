@@ -3,7 +3,7 @@
 
   const STRIPE_CHECKOUT_ENDPOINT = "/api/create-checkout-session";
   const SHIPPING_RATES_ENDPOINT = "/api/shipping-rates";
-  const WHATSAPP_NUMBER = "525637091144";
+  const WHATSAPP_NUMBER = "525662692923";
   const CART_STORAGE_KEY = "casa_anglard_cart";
 
   const $ = id => document.getElementById(id);
@@ -1808,6 +1808,18 @@
           return;
         }
 
+        const consentInput =
+          $("privacyConsent");
+
+        if (!consentInput?.checked) {
+          if (shippingStatus) {
+            shippingStatus.textContent =
+              "Debes aceptar el Aviso de Privacidad y los Términos y Condiciones antes de continuar.";
+          }
+
+          return;
+        }
+
         if (shippingSubmit) {
           shippingSubmit.disabled =
             true;
@@ -1868,7 +1880,13 @@
             country:
               "MX",
 
-            postalCode
+            postalCode,
+
+            consentAccepted:
+              true,
+
+            consentTimestamp:
+              new Date().toISOString()
           };
 
           const response =

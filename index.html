@@ -526,6 +526,14 @@
           Contacto
         </a>
 
+        <a href="privacidad.html">
+          Aviso de Privacidad
+        </a>
+
+        <a href="terminos.html">
+          Términos y Condiciones
+        </a>
+
       </div>
 
       <div class="footer-col">
@@ -737,6 +745,39 @@
             placeholder="Se validará con el código postal"
             required
           >
+
+          <label
+            for="privacyConsent"
+            style="
+              display:flex;
+              align-items:flex-start;
+              gap:8px;
+              font-size:12.5px;
+              color:var(--muted);
+              cursor:pointer;
+            "
+          >
+            <input
+              type="checkbox"
+              id="privacyConsent"
+              required
+              style="margin-top:3px;"
+            >
+            <span>
+              He leído y acepto el
+              <a
+                href="privacidad.html"
+                target="_blank"
+                style="color:var(--teal); text-decoration:underline;"
+              >Aviso de Privacidad</a>
+              y los
+              <a
+                href="terminos.html"
+                target="_blank"
+                style="color:var(--teal); text-decoration:underline;"
+              >Términos y Condiciones</a>.
+            </span>
+          </label>
 
           <button
             type="submit"
