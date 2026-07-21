@@ -3,25 +3,71 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Términos y Condiciones — Casa Anglard</title>
-  <meta name="description" content="Términos y condiciones de compra, envío, pago y devoluciones de Casa Anglard.">
-  <link rel="canonical" href="https://www.casa-anglard.com/terminos.html">
-  <link rel="icon" href="images/casa-anglard.jpg.png" type="image/png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="styles.css">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Términos y Condiciones — Casa Anglard
+  </title>
+
+  <meta
+    name="description"
+    content="Términos y condiciones de compra, pago, envío, cancelación, devolución y garantía de Casa Anglard."
+  >
+
+  <link
+    rel="canonical"
+    href="https://www.casa-anglard.com/terminos.html"
+  >
+
+  <link
+    rel="icon"
+    href="images/casa-anglard.jpg.png"
+    type="image/png"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="styles.css"
+  >
+
   <style>
     .legal-wrap {
-      max-width: 780px;
+      max-width: 820px;
       margin: 0 auto;
-      padding: clamp(40px, 6vw, 72px) clamp(16px, 4vw, 48px) 80px;
+      padding:
+        clamp(40px, 6vw, 72px)
+        clamp(16px, 4vw, 48px)
+        80px;
     }
+
     .legal-wrap h1 {
       font-family: var(--font-display);
-      font-size: clamp(28px, 3.4vw, 38px);
+      font-size: clamp(28px, 3.4vw, 40px);
       font-weight: 500;
-      margin: 0 0 6px;
+      line-height: 1.15;
+      margin: 0 0 8px;
     }
+
     .legal-updated {
       font-family: var(--font-mono);
       font-size: 12px;
@@ -29,44 +75,66 @@
       letter-spacing: 0.04em;
       margin: 0 0 36px;
     }
+
     .legal-wrap h2 {
       font-family: var(--font-display);
-      font-size: 20px;
+      font-size: 21px;
       font-weight: 500;
+      line-height: 1.3;
       margin: 38px 0 12px;
     }
-    .legal-wrap p, .legal-wrap li {
+
+    .legal-wrap p,
+    .legal-wrap li {
       font-size: 14.5px;
-      line-height: 1.7;
+      line-height: 1.75;
       color: var(--ink);
     }
-    .legal-wrap ul {
-      padding-left: 20px;
+
+    .legal-wrap ul,
+    .legal-wrap ol {
+      padding-left: 22px;
       margin: 10px 0;
     }
-    .legal-wrap li { margin-bottom: 6px; }
+
+    .legal-wrap li {
+      margin-bottom: 7px;
+    }
+
+    .legal-wrap a {
+      color: var(--teal);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
     .legal-note {
       font-size: 13px;
+      line-height: 1.65;
       color: var(--muted);
       background: var(--teal-soft);
-      padding: 12px 14px;
+      padding: 14px 16px;
       border-radius: 2px;
-      margin: 10px 0;
+      margin: 28px 0 0;
     }
+
     .back-link {
       display: inline-block;
-      margin-bottom: 24px;
+      margin-bottom: 26px;
       font-size: 13px;
       color: var(--teal);
       text-decoration: underline;
       text-underline-offset: 3px;
     }
-    .placeholder {
-      background: oklch(88% 0.08 85);
-      padding: 1px 5px;
-      border-radius: 2px;
-      font-family: var(--font-mono);
-      font-size: 13px;
+
+    .provider-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 18px 20px;
+      margin: 24px 0 30px;
+    }
+
+    .provider-card p {
+      margin: 5px 0;
     }
   </style>
 </head>
@@ -74,136 +142,860 @@
 <body>
 
   <header class="site-header">
+
     <div class="header-inner">
-      <a href="index.html" class="logo">Casa Anglard</a>
-      <nav class="main-nav">
-        <a href="index.html#catalogo">Catálogo</a>
-        <a href="index.html#contacto">Contacto</a>
+
+      <a
+        href="index.html"
+        class="logo-link"
+        aria-label="Volver al inicio de Casa Anglard"
+      >
+        <img
+          src="images/casa-anglard.jpg.png"
+          alt="Casa Anglard"
+          style="
+            height:clamp(40px, 5vw, 60px);
+            width:auto;
+          "
+        >
+      </a>
+
+      <nav
+        class="main-nav"
+        aria-label="Navegación"
+      >
+
+        <a href="index.html#catalogo">
+          Catálogo
+        </a>
+
+        <a href="index.html#envio">
+          Envíos
+        </a>
+
+        <a href="index.html#contacto">
+          Contacto
+        </a>
+
       </nav>
+
     </div>
+
   </header>
 
   <main class="legal-wrap">
 
-    <a href="index.html" class="back-link">← Volver a Casa Anglard</a>
+    <a
+      href="index.html"
+      class="back-link"
+    >
+      ← Volver a Casa Anglard
+    </a>
 
-    <h1>Términos y Condiciones</h1>
-    <p class="legal-updated">Última actualización: <span class="placeholder">[COMPLETAR FECHA]</span></p>
+    <span class="eyebrow">
+      Condiciones de compra
+    </span>
 
-    <p>
-      Estos Términos y Condiciones regulan la compra de productos a través de
-      www.casa-anglard.com, operado por Casa Anglard, con domicilio en Ciudad de
-      México, México, y RFC <span class="placeholder">[COMPLETAR RFC]</span>. Al
-      realizar una compra en este sitio, aceptas los términos aquí descritos.
+    <h1>
+      Términos y Condiciones
+    </h1>
+
+    <p class="legal-updated">
+      Última actualización: 20 de julio de 2026
     </p>
 
-    <h2>1. Productos y precios</h2>
     <p>
-      Los precios mostrados están expresados en pesos mexicanos (MXN) e incluyen IVA.
-      Los precios están sujetos a cambio sin previo aviso, aunque el precio vigente al
-      momento de confirmar tu pago es el que aplica a tu compra. Los pedidos especiales
-      o personalizados se realizan bajo cotización previa. En compras de mayoreo (cinco
-      piezas o más del mismo artículo) puede aplicar un precio preferencial, sujeto a
-      confirmación directa por WhatsApp o correo electrónico.
+      Estos Términos y Condiciones regulan el acceso, navegación y
+      compra de productos a través de
+      <strong>www.casa-anglard.com</strong>.
     </p>
 
-    <h2>2. Proceso de compra</h2>
     <p>
-      La compra se realiza en tres pasos: selección de producto(s), cotización de
-      envío a través de Envia.com, y pago a través de la plataforma segura de Stripe.
-      Tu pedido se considera confirmado únicamente cuando el pago ha sido procesado
-      exitosamente por Stripe.
+      Al utilizar el sitio, solicitar una cotización, incorporar
+      productos a la bolsa o completar una compra, manifiestas que
+      leíste y aceptas estos Términos y Condiciones y el
+      <a href="privacidad.html">
+        Aviso de Privacidad
+      </a>.
     </p>
 
-    <h2>3. Envíos</h2>
+    <div class="provider-card">
+
+      <p>
+        <strong>Proveedor:</strong>
+        Casa Anglard
+      </p>
+
+      <p>
+        <strong>Ubicación:</strong>
+        Ciudad de México, México
+      </p>
+
+      <p>
+        <strong>Correo electrónico:</strong>
+
+        <a href="mailto:casaanglard@gmail.com">
+          casaanglard@gmail.com
+        </a>
+      </p>
+
+      <p>
+        <strong>WhatsApp:</strong>
+
+        <a
+          href="https://wa.me/525662692923"
+          target="_blank"
+          rel="noopener"
+        >
+          56 6269 2923
+        </a>
+      </p>
+
+      <p>
+        <strong>Sitio web:</strong>
+        www.casa-anglard.com
+      </p>
+
+    </div>
+
+    <h2>
+      1. Capacidad para comprar
+    </h2>
+
     <p>
-      El costo de envío se calcula según la dirección de entrega proporcionada, con
-      tarifas obtenidas directamente de Envia.com. El tiempo estimado de entrega es de
-      <span class="placeholder">[COMPLETAR: ej. 5 a 10 días hábiles]</span> a partir de
-      la confirmación del pago, salvo causas de fuerza mayor o retrasos atribuibles a
-      la paquetería. Si el plazo de entrega ofrecido no se cumple, tienes derecho a
-      exigir la entrega inmediata del producto o la devolución de la cantidad pagada,
-      conforme al Artículo 92 TER de la Ley Federal de Protección al Consumidor.
+      Las compras deben ser realizadas por personas mayores de
+      18 años con capacidad legal para celebrar contratos.
+      Las personas menores de edad únicamente podrán comprar con la
+      autorización y supervisión de su madre, padre o tutor.
     </p>
 
-    <h2>4. Métodos de pago</h2>
     <p>
-      Aceptamos pagos con tarjeta de crédito o débito a través de Stripe. Casa Anglard
-      no almacena ni tiene acceso a los datos completos de tu tarjeta; estos son
-      procesados directamente por Stripe bajo su propio marco de seguridad (PCI DSS).
+      Casa Anglard podrá cancelar una operación cuando existan
+      indicios razonables de fraude, suplantación de identidad,
+      uso no autorizado de un método de pago o incumplimiento de
+      estos términos.
     </p>
 
-    <h2>5. Cancelaciones y devoluciones</h2>
+    <h2>
+      2. Productos
+    </h2>
+
     <p>
-      Puedes solicitar la cancelación de tu pedido antes de que haya sido enviado,
-      escribiendo a <a href="mailto:casaanglard@gmail.com">casaanglard@gmail.com</a> o
-      por WhatsApp. Una vez enviado el pedido:
+      Casa Anglard comercializa objetos impresos, textiles,
+      accesorios, libros, productos aromáticos y otras piezas
+      descritas en su catálogo.
     </p>
+
+    <p>
+      Procuramos mostrar fotografías, materiales, medidas, tallas,
+      presentaciones y características de manera clara. Sin embargo,
+      pueden existir variaciones menores de color, textura, acabado,
+      tamaño o apariencia derivadas de la pantalla utilizada, los
+      procesos de impresión, la elaboración artesanal, el lote de
+      producción o la naturaleza de los materiales.
+    </p>
+
+    <p>
+      Estas variaciones razonables no se considerarán defectos cuando
+      no alteren la funcionalidad, identidad o características
+      esenciales del producto.
+    </p>
+
+    <h2>
+      3. Disponibilidad
+    </h2>
+
+    <p>
+      La publicación de un producto no garantiza disponibilidad
+      permanente. Los pedidos están sujetos a existencia, capacidad
+      de producción y confirmación del pago.
+    </p>
+
+    <p>
+      Cuando un producto pagado no se encuentre disponible,
+      Casa Anglard se comunicará contigo para ofrecerte:
+    </p>
+
     <ul>
       <li>
-        <span class="placeholder">[COMPLETAR: define tu política — ej. "Aceptamos
-        cambios o devoluciones dentro de los X días posteriores a la entrega, siempre
-        que el producto esté en su empaque y condición original."]</span>
+        Esperar la reposición o elaboración.
       </li>
-      <li>Los productos personalizados o bajo cotización especial no son sujetos a devolución, salvo defecto de fabricación.</li>
+
+      <li>
+        Sustituirlo por otro producto de valor equivalente.
+      </li>
+
+      <li>
+        Recibir el reembolso correspondiente.
+      </li>
     </ul>
+
     <p>
-      Conservas en todo momento los derechos que la Ley Federal de Protección al
-      Consumidor te otorga como consumidor, independientemente de lo aquí descrito.
+      Ninguna sustitución se realizará sin tu aceptación.
     </p>
 
-    <h2>6. Garantía</h2>
+    <h2>
+      4. Precios e impuestos
+    </h2>
+
     <p>
-      Los productos cuentan con garantía contra defectos de fabricación por
-      <span class="placeholder">[COMPLETAR: ej. 30 días]</span> a partir de la fecha de
-      entrega. Para hacerla válida, contáctanos con evidencia fotográfica del defecto.
+      Los precios se expresan en pesos mexicanos y, salvo indicación
+      distinta, incluyen los impuestos aplicables.
     </p>
 
-    <h2>7. Restricciones de edad</h2>
     <p>
-      Este sitio está dirigido a personas mayores de 18 años. Si eres menor de edad,
-      necesitas la autorización de tu padre, madre o tutor para realizar una compra.
+      El costo de envío se calcula por separado de acuerdo con el
+      destino, dimensiones, peso, transportista y servicio seleccionado.
+      El importe total se mostrará antes de que seas enviado a la
+      plataforma de pago.
     </p>
 
-    <h2>8. Contacto y aclaraciones</h2>
     <p>
-      Para dudas, aclaraciones o quejas relacionadas con tu compra, puedes escribirnos
-      a <a href="mailto:casaanglard@gmail.com">casaanglard@gmail.com</a> o por WhatsApp
-      al <a href="https://wa.me/525662692923" target="_blank" rel="noopener">56 6269 2923</a>.
-      Si tu inconformidad no se resuelve directamente con nosotros, puedes acudir a la
-      Procuraduría Federal del Consumidor (PROFECO).
+      Los precios pueden modificarse sin previo aviso. La modificación
+      no afectará compras cuyo pago haya sido confirmado previamente.
+    </p>
+
+    <p>
+      Los descuentos, precios de mayoreo, promociones y códigos
+      promocionales estarán sujetos a sus condiciones, vigencia,
+      disponibilidad y restricciones particulares.
+    </p>
+
+    <h2>
+      5. Proceso de compra
+    </h2>
+
+    <p>
+      Para completar una compra:
+    </p>
+
+    <ol>
+      <li>
+        Selecciona el producto, variante y cantidad.
+      </li>
+
+      <li>
+        Incorpora los productos a tu bolsa.
+      </li>
+
+      <li>
+        Proporciona los datos necesarios para cotizar el envío.
+      </li>
+
+      <li>
+        Selecciona una opción de mensajería.
+      </li>
+
+      <li>
+        Revisa el importe total.
+      </li>
+
+      <li>
+        Acepta el Aviso de Privacidad y estos Términos y Condiciones.
+      </li>
+
+      <li>
+        Completa el pago en la página segura de Stripe.
+      </li>
+    </ol>
+
+    <p>
+      La incorporación de artículos a la bolsa no constituye una
+      reservación. El pedido queda confirmado únicamente cuando Stripe
+      aprueba el pago y Casa Anglard recibe la confirmación de la
+      transacción.
+    </p>
+
+    <h2>
+      6. Métodos de pago
+    </h2>
+
+    <p>
+      Los pagos en línea se procesan mediante Stripe con los métodos
+      habilitados en su plataforma al momento de la compra.
+    </p>
+
+    <p>
+      Casa Anglard no almacena los datos completos de tarjetas.
+      Stripe puede rechazar o solicitar verificaciones adicionales
+      conforme a sus políticas de seguridad y prevención de fraude.
+    </p>
+
+    <p>
+      La aparición de un cargo temporal, retención o intento de pago
+      no implica necesariamente que la operación haya sido aprobada.
+      La confirmación definitiva dependerá del estado informado por
+      Stripe.
+    </p>
+
+    <h2>
+      7. Confirmación y comprobante
+    </h2>
+
+    <p>
+      Después de completar el pago, Stripe mostrará una confirmación
+      y podrá enviar un comprobante al correo proporcionado.
+      Casa Anglard también podrá comunicarse contigo para confirmar
+      información logística o proporcionar seguimiento.
+    </p>
+
+    <p>
+      Es responsabilidad del comprador proporcionar datos correctos
+      y conservar la confirmación, recibo o identificador de la
+      transacción.
+    </p>
+
+    <h2>
+      8. Facturación
+    </h2>
+
+    <p>
+      Cuando requieras factura, solicítala mediante
+      <a href="mailto:casaanglard@gmail.com">
+        casaanglard@gmail.com
+      </a>
+      o WhatsApp, proporcionando los datos fiscales y la información
+      de la compra.
+    </p>
+
+    <p>
+      La solicitud deberá realizarse dentro del mismo mes calendario
+      en el que se efectuó el pago, salvo que una disposición fiscal
+      permita o exija un plazo diferente.
+    </p>
+
+    <h2>
+      9. Cotización de envíos
+    </h2>
+
+    <p>
+      Las tarifas mostradas se obtienen mediante Envia.com y dependen
+      de la información proporcionada por el comprador y de las tarifas
+      disponibles al momento de la consulta.
+    </p>
+
+    <p>
+      La tarifa podrá recalcularse antes de crear el pago para confirmar
+      que continúa vigente. Cuando la tarifa seleccionada deje de estar
+      disponible, se te solicitará elegir una nueva opción.
+    </p>
+
+    <p>
+      Una cotización no equivale a una guía de envío ni garantiza por
+      sí misma la aceptación del paquete por parte del transportista.
+    </p>
+
+    <h2>
+      10. Preparación y entrega
+    </h2>
+
+    <p>
+      Los productos disponibles para entrega inmediata normalmente se
+      preparan dentro de los siguientes
+      <strong>dos a cinco días hábiles</strong>
+      posteriores a la confirmación del pago.
+    </p>
+
+    <p>
+      Los productos personalizados, bajo pedido, de producción especial
+      o temporalmente agotados podrán requerir un plazo diferente,
+      el cual será informado antes de confirmar la producción o tan
+      pronto como sea posible.
+    </p>
+
+    <p>
+      El plazo de traslado mostrado por la mensajería comienza a partir
+      de que el paquete es recibido por el transportista y es adicional
+      al tiempo de preparación.
+    </p>
+
+    <p>
+      Los plazos de mensajería son estimados y pueden variar por:
+    </p>
+
+    <ul>
+      <li>
+        Zona extendida o de difícil acceso.
+      </li>
+
+      <li>
+        Condiciones climáticas.
+      </li>
+
+      <li>
+        Saturación operativa.
+      </li>
+
+      <li>
+        Días inhábiles.
+      </li>
+
+      <li>
+        Inspecciones, restricciones o acontecimientos de fuerza mayor.
+      </li>
+
+      <li>
+        Información incompleta o incorrecta del destinatario.
+      </li>
+    </ul>
+
+    <h2>
+      11. Dirección incorrecta y entregas fallidas
+    </h2>
+
+    <p>
+      El comprador debe revisar que el nombre, teléfono, calle,
+      número, colonia, código postal, municipio y demás datos sean
+      correctos antes de pagar.
+    </p>
+
+    <p>
+      Cuando un paquete no pueda entregarse por datos incorrectos,
+      ausencia reiterada, rechazo del destinatario o falta de
+      instrucciones, los costos de reexpedición, retorno o nueva guía
+      podrán ser cubiertos por el comprador, salvo que la causa sea
+      imputable a Casa Anglard o al transportista.
+    </p>
+
+    <h2>
+      12. Rastreo y recepción
+    </h2>
+
+    <p>
+      Cuando exista un número de guía, Casa Anglard podrá compartirlo
+      mediante correo electrónico o WhatsApp.
+    </p>
+
+    <p>
+      Al recibir el paquete, recomendamos revisar que el empaque no
+      presente daños visibles. Si observas una afectación importante,
+      toma fotografías o video antes de abrirlo y conserva el empaque
+      original para facilitar cualquier reclamación.
+    </p>
+
+    <h2>
+      13. Cancelaciones antes del envío
+    </h2>
+
+    <p>
+      Puedes solicitar la cancelación de un producto estándar antes
+      de que sea entregado al transportista escribiendo a
+      <a href="mailto:casaanglard@gmail.com">
+        casaanglard@gmail.com
+      </a>
+      o enviando un mensaje al
+      <a
+        href="https://wa.me/525662692923"
+        target="_blank"
+        rel="noopener"
+      >
+        56 6269 2923
+      </a>.
+    </p>
+
+    <p>
+      Cuando la cancelación sea procedente, el reembolso se realizará
+      al mismo método de pago utilizado. Los tiempos de reflejo
+      dependerán de Stripe, del banco emisor y de la red de pagos.
+    </p>
+
+    <p>
+      Los productos personalizados o fabricados especialmente podrán
+      cancelarse únicamente antes de que comience su elaboración.
+      Cuando la producción ya haya iniciado, podrá descontarse el costo
+      efectivamente generado, siempre que resulte legalmente procedente
+      y sea informado al comprador.
+    </p>
+
+    <h2>
+      14. Cambios y devoluciones
+    </h2>
+
+    <p>
+      Para productos estándar, puedes solicitar un cambio o devolución
+      dentro de los
+      <strong>cinco días hábiles posteriores a la entrega</strong>,
+      siempre que:
+    </p>
+
+    <ul>
+      <li>
+        El producto no haya sido usado, lavado, alterado o dañado.
+      </li>
+
+      <li>
+        Conserve etiquetas, accesorios y empaque original cuando éstos
+        formen parte del producto.
+      </li>
+
+      <li>
+        Se presente el comprobante o información suficiente para
+        localizar la compra.
+      </li>
+
+      <li>
+        La solicitud no corresponda a un producto personalizado,
+        preparado especialmente o elaborado conforme a indicaciones
+        particulares.
+      </li>
+    </ul>
+
+    <p>
+      Cuando la devolución obedezca a una decisión del comprador y el
+      producto no presente defecto ni error de surtido, el comprador
+      cubrirá el costo del envío de retorno.
+    </p>
+
+    <p>
+      Cuando Casa Anglard haya enviado un producto equivocado, incompleto
+      o con defecto de fabricación, Casa Anglard asumirá los costos
+      razonables de sustitución o devolución.
+    </p>
+
+    <p>
+      Antes de devolver un producto debes solicitar instrucciones.
+      No envíes mercancía sin autorización y sin datos que permitan
+      identificar el pedido.
+    </p>
+
+    <h2>
+      15. Productos que no admiten devolución por razones de uso
+    </h2>
+
+    <p>
+      Por razones de higiene, seguridad y naturaleza del producto,
+      los productos aromáticos abiertos, usados, manipulados o cuyo
+      sello haya sido retirado no podrán devolverse por simple cambio
+      de opinión.
+    </p>
+
+    <p>
+      Esta limitación no aplica cuando exista defecto, contaminación,
+      error de surtido, incumplimiento de las características ofrecidas
+      o cualquier otro supuesto protegido por la legislación aplicable.
+    </p>
+
+    <h2>
+      16. Productos personalizados
+    </h2>
+
+    <p>
+      Los artículos personalizados, impresos bajo aprobación del cliente,
+      fabricados con medidas particulares o preparados especialmente
+      no admiten cambios ni devoluciones por gusto, talla seleccionada
+      incorrectamente o cambio de opinión.
+    </p>
+
+    <p>
+      Sí procederá la revisión cuando el producto presente un defecto
+      de fabricación o sea sustancialmente distinto de la especificación
+      aprobada.
+    </p>
+
+    <h2>
+      17. Garantía
+    </h2>
+
+    <p>
+      Los productos cuentan con una garantía comercial de
+      <strong>30 días naturales a partir de la entrega</strong>
+      contra defectos de fabricación.
+    </p>
+
+    <p>
+      Para solicitarla, envía:
+    </p>
+
+    <ul>
+      <li>
+        Nombre del comprador.
+      </li>
+
+      <li>
+        Número, fecha o comprobante de la operación.
+      </li>
+
+      <li>
+        Descripción del problema.
+      </li>
+
+      <li>
+        Fotografías o video que permitan revisar el producto.
+      </li>
+    </ul>
+
+    <p>
+      La garantía no cubre daños causados por uso contrario a las
+      instrucciones, accidentes, humedad, exposición inadecuada,
+      lavado incorrecto, desgaste normal, modificación, reparación
+      por terceros o almacenamiento deficiente.
+    </p>
+
+    <p>
+      Cuando la garantía resulte procedente, Casa Anglard podrá,
+      según el caso y conforme a la legislación:
+    </p>
+
+    <ul>
+      <li>
+        Reparar el producto.
+      </li>
+
+      <li>
+        Sustituirlo por otro igual o equivalente.
+      </li>
+
+      <li>
+        Reembolsar total o parcialmente el precio pagado.
+      </li>
+    </ul>
+
+    <h2>
+      18. Reembolsos
+    </h2>
+
+    <p>
+      Los reembolsos autorizados se tramitarán al método de pago
+      original siempre que sea técnicamente posible.
+    </p>
+
+    <p>
+      Casa Anglard iniciará el trámite dentro de un plazo razonable
+      después de aprobar la devolución, recibir el producto cuando
+      corresponda y verificar su estado. El tiempo en que el importe
+      aparezca en la cuenta depende de Stripe, el banco y la red de
+      pagos.
+    </p>
+
+    <h2>
+      19. Uso de productos aromáticos
+    </h2>
+
+    <p>
+      Los productos aromáticos deben utilizarse conforme a sus
+      instrucciones, presentación y finalidad. No deben ingerirse ni
+      aplicarse directamente en ojos, mucosas o piel lesionada.
+    </p>
+
+    <p>
+      Mantén los productos fuera del alcance de niñas, niños y mascotas.
+      Antes de cualquier uso corporal, revisa las indicaciones y realiza
+      una prueba en una zona pequeña cuando corresponda.
+    </p>
+
+    <p>
+      Las descripciones de aromas y bienestar tienen fines informativos
+      y sensoriales. Los productos no sustituyen diagnóstico,
+      tratamiento, medicamento ni atención profesional.
+    </p>
+
+    <h2>
+      20. Atención y reclamaciones
+    </h2>
+
+    <p>
+      Para aclaraciones, cancelaciones, cambios, garantías o
+      reclamaciones, comunícate mediante:
+    </p>
+
+    <ul>
+      <li>
+        Correo:
+        <a href="mailto:casaanglard@gmail.com">
+          casaanglard@gmail.com
+        </a>
+      </li>
+
+      <li>
+        WhatsApp:
+        <a
+          href="https://wa.me/525662692923"
+          target="_blank"
+          rel="noopener"
+        >
+          56 6269 2923
+        </a>
+      </li>
+    </ul>
+
+    <p>
+      Incluye tu nombre, fecha de compra, producto, importe y una
+      explicación clara de la solicitud para que podamos localizar
+      y atender la operación.
+    </p>
+
+    <p>
+      Tus derechos como persona consumidora permanecen vigentes
+      independientemente de lo establecido en este documento.
+      Cuando una inconformidad no pueda resolverse directamente,
+      puedes acudir a la Procuraduría Federal del Consumidor.
+    </p>
+
+    <h2>
+      21. Privacidad
+    </h2>
+
+    <p>
+      El tratamiento de los datos personales se rige por el
+      <a href="privacidad.html">
+        Aviso de Privacidad de Casa Anglard
+      </a>.
+    </p>
+
+    <p>
+      El procesamiento de pagos está sujeto además a los términos y
+      políticas de Stripe. Los servicios logísticos están sujetos a
+      las condiciones operativas de Envia.com y del transportista
+      seleccionado, sin perjuicio de las obligaciones que correspondan
+      a Casa Anglard frente al consumidor.
+    </p>
+
+    <h2>
+      22. Propiedad intelectual
+    </h2>
+
+    <p>
+      Los textos, fotografías, diseños, marcas, logotipos, ilustraciones,
+      archivos, catálogos y demás contenidos del sitio pertenecen a
+      Casa Anglard o se utilizan con la autorización correspondiente.
+    </p>
+
+    <p>
+      Su publicación no concede autorización para copiar, reproducir,
+      distribuir, transformar, explotar comercialmente o utilizar los
+      contenidos fuera de los límites permitidos por la legislación.
+    </p>
+
+    <h2>
+      23. Disponibilidad del sitio
+    </h2>
+
+    <p>
+      Casa Anglard procura mantener el sitio disponible y actualizado,
+      pero puede suspenderlo temporalmente para mantenimiento,
+      actualización, seguridad, corrección de errores o por causas
+      fuera de su control.
+    </p>
+
+    <p>
+      Cuando un error técnico afecte un precio, producto, tarifa o
+      transacción, Casa Anglard se comunicará con el comprador para
+      corregir la información, confirmar la operación en condiciones
+      válidas o efectuar el reembolso correspondiente.
+    </p>
+
+    <h2>
+      24. Modificaciones
+    </h2>
+
+    <p>
+      Casa Anglard podrá modificar estos Términos y Condiciones para
+      reflejar cambios legales, operativos, tecnológicos o comerciales.
+      La versión vigente y su fecha de actualización estarán disponibles
+      en:
+    </p>
+
+    <p>
+      <a href="https://www.casa-anglard.com/terminos.html">
+        www.casa-anglard.com/terminos.html
+      </a>
+    </p>
+
+    <p>
+      Las modificaciones no alterarán retroactivamente los derechos
+      adquiridos en una compra ya confirmada.
+    </p>
+
+    <h2>
+      25. Legislación aplicable
+    </h2>
+
+    <p>
+      Estos términos se interpretarán conforme a la legislación
+      aplicable en los Estados Unidos Mexicanos, especialmente las
+      disposiciones de protección al consumidor y comercio electrónico.
+    </p>
+
+    <p>
+      Cualquier disposición que resulte inválida o inaplicable se
+      tendrá por separada sin afectar la validez de las demás.
+      Ninguna cláusula se interpretará como renuncia a los derechos
+      irrenunciables de las personas consumidoras.
     </p>
 
     <div class="legal-note">
-      Este documento fue preparado como borrador base y debe ser revisado por un
-      profesional legal antes de su publicación definitiva, particularmente los
-      campos marcados como <span class="placeholder">[COMPLETAR]</span> — los plazos
-      de entrega, devoluciones y garantía son decisiones de política comercial tuyas,
-      no cifras fijadas por la ley (salvo donde se indica lo contrario).
+      Antes de comprar, revisa las características del producto,
+      presentación, cantidad, dirección de entrega, tarifa de envío
+      e importe total. Para aclaraciones escribe a
+      casaanglard@gmail.com.
     </div>
 
   </main>
 
   <footer class="site-footer">
+
     <div class="footer-inner">
+
       <div>
-        <div class="footer-logo" style="margin-bottom:12px;">Casa Anglard</div>
-        <p class="footer-tag">Objetos, aromas y bienestar con intención.</p>
+
+        <div
+          class="footer-logo"
+          style="margin-bottom:12px;"
+        >
+          Casa Anglard
+        </div>
+
+        <p class="footer-tag">
+          Objetos, aromas y bienestar con intención.
+        </p>
+
       </div>
+
       <div class="footer-col">
-        <a href="index.html#catalogo">Catálogo</a>
-        <a href="privacidad.html">Aviso de Privacidad</a>
-        <a href="terminos.html">Términos y Condiciones</a>
+
+        <a href="index.html#catalogo">
+          Catálogo
+        </a>
+
+        <a href="index.html#envio">
+          Envíos
+        </a>
+
+        <a href="privacidad.html">
+          Aviso de Privacidad
+        </a>
+
+        <a href="terminos.html">
+          Términos y Condiciones
+        </a>
+
       </div>
+
       <div class="footer-col">
-        <a href="https://wa.me/525662692923" target="_blank" rel="noopener">WhatsApp: 56 6269 2923</a>
-        <a href="mailto:casaanglard@gmail.com">casaanglard@gmail.com</a>
+
+        <a
+          href="https://wa.me/525662692923"
+          target="_blank"
+          rel="noopener"
+        >
+          WhatsApp: 56 6269 2923
+        </a>
+
+        <a href="mailto:casaanglard@gmail.com">
+          casaanglard@gmail.com
+        </a>
+
       </div>
+
     </div>
+
     <div class="footer-bottom">
-      © 2026 Casa Anglard. Precios sujetos a cambio.
+      © 2026 Casa Anglard.
+      Todos los derechos reservados.
     </div>
+
   </footer>
 
 </body>
+
 </html>
