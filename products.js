@@ -238,6 +238,11 @@ const PRODUCTS = [
     ],
     img: "images/sudadera.jpg"
   },
+
+  // ==========================================
+  // KITS PARA EVENTOS SOCIALES
+  // ==========================================
+
   {
     id: "kit-eventos-esencial",
     sku: "CA-EVE-001",
@@ -245,7 +250,7 @@ const PRODUCTS = [
     category: "eventos",
     categoryLabel: "Eventos sociales",
     medidas: "Contenido personalizable",
-    material: "Textiles e impresión personalizada",
+    material: "Manta, madera, textil e impresión personalizada",
     description:
       "Kit personalizado para cumpleaños, bodas, XV años y celebraciones especiales. " +
       "Incluye bolsa de manta personalizada, abanico personalizado y pañuelo impreso. " +
@@ -261,7 +266,7 @@ const PRODUCTS = [
     category: "eventos",
     categoryLabel: "Eventos sociales",
     medidas: "Contenido personalizable",
-    material: "Textiles e impresión personalizada",
+    material: "Manta, textil, madera e impresión personalizada",
     description:
       "Kit personalizado para consentir a los invitados durante bodas, XV años, " +
       "cumpleaños y celebraciones especiales. Incluye bolsa de manta personalizada, " +
@@ -280,14 +285,75 @@ const PRODUCTS = [
     medidas: "Contenido personalizable",
     material: "Textiles, impresión personalizada y artículos seleccionados",
     description:
-      "Kit personalizado para eventos y celebraciones. Incluye bolsa de manta personalizada, " +
-      "pantuflas personalizadas, abanico personalizado, pañuelo impreso y una selección de " +
-      "artículos de recuperación presentada en bolsa de organza. Disponible desde $699 por persona. " +
-      "Pedido mínimo de 10 paquetes. El contenido, marcas, cantidades y precio final están sujetos " +
-      "a disponibilidad y cotización.",
+      "Kit personalizado para bodas, fiestas y celebraciones especiales. " +
+      "Incluye bolsa de manta personalizada, pantuflas personalizadas, abanico personalizado, " +
+      "pañuelo impreso y una selección de artículos de recuperación presentada en bolsa de organza. " +
+      "Disponible desde $699 por persona. Pedido mínimo de 10 paquetes. " +
+      "El contenido, marcas, cantidades y precio final están sujetos a disponibilidad y cotización.",
     price: null,
     img: "images/kit-eventos-recuperacion.png"
   },
+
+  // ==========================================
+  // KITS CORPORATIVOS
+  // ==========================================
+
+  {
+    id: "kit-corporativo-esencial",
+    sku: "CA-COR-001",
+    name: "Kit Corporativo Esencial",
+    category: "corporativos",
+    categoryLabel: "Empresariales",
+    medidas: "Contenido e identidad personalizables",
+    material: "Manta, papelería, madera y metal",
+    description:
+      "Kit funcional para congresos, capacitaciones, convenciones, reuniones de trabajo " +
+      "y eventos institucionales. Incluye bolsa de manta personalizada, libreta de cubierta rígida, " +
+      "bolígrafo metálico y lápiz de madera. Disponible desde $549 por asistente. " +
+      "Pedido mínimo de 10 paquetes. El precio final depende de la cantidad, diseño, " +
+      "técnica de impresión y nivel de personalización.",
+    price: null,
+    img: "images/kit-corporativo-esencial.png"
+  },
+  {
+    id: "kit-corporativo-ejecutivo",
+    sku: "CA-COR-002",
+    name: "Kit Corporativo Ejecutivo",
+    category: "corporativos",
+    categoryLabel: "Empresariales",
+    medidas: "Contenido e identidad personalizables",
+    material: "Manta, acero inoxidable, papelería, madera y metal",
+    description:
+      "Kit corporativo de presentación ejecutiva para congresos, convenciones, lanzamientos, " +
+      "reuniones directivas, ponentes e invitados especiales. Incluye bolsa de manta personalizada, " +
+      "termo de acero inoxidable, libreta de cubierta rígida, bolígrafo metálico y lápiz de madera. " +
+      "Disponible desde $1,249 por asistente. Pedido mínimo de 10 paquetes. " +
+      "El precio final depende de la cantidad, técnica de impresión, diseño y personalización.",
+    price: null,
+    img: "images/kit-corporativo-ejecutivo.png"
+  },
+  {
+    id: "kit-corporativo-premium",
+    sku: "CA-COR-003",
+    name: "Kit Corporativo Premium",
+    category: "corporativos",
+    categoryLabel: "Empresariales",
+    medidas: "Contenido, empaque e identidad personalizables",
+    material: "Manta, acero inoxidable, papelería, madera, metal y empaque especial",
+    description:
+      "Experiencia corporativa premium para clientes estratégicos, directivos, ponentes " +
+      "e invitados de alto nivel. Incluye bolsa de manta personalizada, termo de acero inoxidable, " +
+      "libreta de cubierta rígida, bolígrafo metálico, lápiz de madera, tarjeta personalizada " +
+      "y empaque especial. Disponible desde $1,449 por asistente. Pedido mínimo de 10 paquetes. " +
+      "Puede incluir nombres, cargos o mensajes individuales. El precio final está sujeto " +
+      "al volumen, tipo de empaque, técnica de impresión y nivel de personalización.",
+    price: null,
+    img: "images/kit-corporativo-premium.png"
+  },
+
+  // ==========================================
+  // AROMAS
+  // ==========================================
 
   ...[
     {
