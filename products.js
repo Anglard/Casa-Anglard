@@ -238,6 +238,56 @@ const PRODUCTS = [
     ],
     img: "images/sudadera.jpg"
   },
+  {
+    id: "kit-eventos-esencial",
+    sku: "CA-EVE-001",
+    name: "Kit Esencial para Eventos",
+    category: "eventos",
+    categoryLabel: "Eventos sociales",
+    medidas: "Contenido personalizable",
+    material: "Textiles e impresión personalizada",
+    description:
+      "Kit personalizado para cumpleaños, bodas, XV años y celebraciones especiales. " +
+      "Incluye bolsa de manta personalizada, abanico personalizado y pañuelo impreso. " +
+      "Disponible desde $329 por persona. Pedido mínimo de 10 paquetes. " +
+      "El precio final depende de la cantidad, diseño, colores y técnica de impresión.",
+    price: null,
+    img: "images/kit-eventos-esencial.png"
+  },
+  {
+    id: "kit-eventos-confort",
+    sku: "CA-EVE-002",
+    name: "Kit Confort para Eventos",
+    category: "eventos",
+    categoryLabel: "Eventos sociales",
+    medidas: "Contenido personalizable",
+    material: "Textiles e impresión personalizada",
+    description:
+      "Kit personalizado para consentir a los invitados durante bodas, XV años, " +
+      "cumpleaños y celebraciones especiales. Incluye bolsa de manta personalizada, " +
+      "pantuflas personalizadas, abanico personalizado y pañuelo impreso. " +
+      "Disponible desde $599 por persona. Pedido mínimo de 10 paquetes. " +
+      "El precio final depende de la cantidad, tallas, diseño, colores y técnica de impresión.",
+    price: null,
+    img: "images/kit-eventos-confort.png"
+  },
+  {
+    id: "kit-eventos-recuperacion",
+    sku: "CA-EVE-003",
+    name: "Kit Confort y Recuperación",
+    category: "eventos",
+    categoryLabel: "Eventos sociales",
+    medidas: "Contenido personalizable",
+    material: "Textiles, impresión personalizada y artículos seleccionados",
+    description:
+      "Kit personalizado para eventos y celebraciones. Incluye bolsa de manta personalizada, " +
+      "pantuflas personalizadas, abanico personalizado, pañuelo impreso y una selección de " +
+      "artículos de recuperación presentada en bolsa de organza. Disponible desde $699 por persona. " +
+      "Pedido mínimo de 10 paquetes. El contenido, marcas, cantidades y precio final están sujetos " +
+      "a disponibilidad y cotización.",
+    price: null,
+    img: "images/kit-eventos-recuperacion.png"
+  },
 
   ...[
     {
